@@ -1,0 +1,20 @@
+<ul className="collapsible">
+            <li>
+                <div className="collapsible-header" onClick={()=>{
+                    onclick(style)
+                    }} ><i className="material-icons">filter_drama</i>Fisrst</div>
+                <div  className={style.display}  ><span >Lorem ipsum dolor sit amet.</span></div>
+            </li>
+            </ul>
+
+
+
+const [style, setStyle] = useState({display : 'collapsible-body-none'})
+
+    const onclick = ()=>{
+        if (style.display === 'collapsible-body-none') {
+            return setStyle({...style,display : 'collapsible-body'})
+        }else{
+            return setStyle({...style,display : 'collapsible-body-none'})
+        }
+    }
