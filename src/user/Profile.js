@@ -86,15 +86,15 @@ function Profile() {
                         
                             {/* </div> */}
                     </div>
-                    <table className='bm0'>
+                    <table className='bm0 profile-nav'>
                                 <tr>
-                                    <th className='text-center'>
+                                    <th className='text-center  profile-nav'>
                                     <a href='#' >Posts {postlength}</a>
                                     </th>
-                                    <th className='text-center '>
+                                    <th className='text-center  profile-nav'>
                                         <a href='#' >Mentions</a>
                                     </th>
-                                    <th className='text-center '>
+                                    <th className='text-center  profile-nav'>
                                         <a href='#' >Saved</a>
                                     </th>
                                 </tr>
@@ -108,6 +108,9 @@ function Profile() {
                  * <Mentions />
                  * <Saved />
                 */}
+                <div class="progress">
+                <div class="indeterminate"></div>
+            </div>
                 {
                     post.map((postData)=>(
                         postData.map((cardData,index)=>(
@@ -138,9 +141,7 @@ function Profile() {
                 <BottomNav />
                 </div>
         )
-    }
-
-   
+    }   
 }
 
 export default Profile
