@@ -56,6 +56,23 @@ function Profile() {
         })
     }, [])
 
+    const onClickMentions = () =>{
+        setPost([])
+    }
+
+    const onClickPost = () =>{
+        getPostByUserId(user._id , token)
+        .then(data =>{
+                console.log(data)
+            setPost([data])
+            console.log([data].length)
+        })
+    }
+
+    const onClickSave = () =>{
+        setPost([])
+    }
+
     let noPost =''
     
     if (post.map((postData)=>(postData.length)) == 0) {
@@ -78,24 +95,28 @@ function Profile() {
         return (
             <div>
                 <div class="row">
-                        <h4 className='text-center'>Profile Page</h4>
                     <div class="col s12 m6">
                         {/***Crad here */}
                         <ProfileCard data={data} post={post} />
                         {/* <div class="card bm0" > */}
                         
                             {/* </div> */}
-                    </div>
+                    </div>{
+                        //**** we are going to create seprate route for getting count of (how many post ,mentions and saved are there) all posts*/
+                    }
                     <table className='bm0 profile-nav'>
                                 <tr>
-                                    <th className='text-center  profile-nav'>
-                                    <a href='#' >Posts {postlength}</a>
+                                    <th className='text-center  profile-nav ' style={{paddingLeft: '5px'}}>
+                                    <a onClick={() => onClickPost()}  >All {postlength}</a>
                                     </th>
                                     <th className='text-center  profile-nav'>
-                                        <a href='#' >Mentions</a>
+                                    <a onClick={() => onClickPost()} style={{color : '#252d2d'}} >Posts {postlength}</a>
                                     </th>
                                     <th className='text-center  profile-nav'>
-                                        <a href='#' >Saved</a>
+                                        <a onClick={()=> onClickMentions()}  >Mentions</a>
+                                    </th>
+                                    <th className='text-center  profile-nav'>
+                                        <a onClick={() => onClickSave()}  >Saved</a>
                                     </th>
                                 </tr>
                             </table>
@@ -108,9 +129,10 @@ function Profile() {
                  * <Mentions />
                  * <Saved />
                 */}
-                <div class="progress">
+                {/* <div class="progress">
                 <div class="indeterminate"></div>
-            </div>
+            </div> */}
+                {/*** Print posts here */}
                 {
                     post.map((postData)=>(
                         postData.map((cardData,index)=>(

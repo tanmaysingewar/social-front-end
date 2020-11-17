@@ -20,6 +20,10 @@ function Search() {
         setSearch({...search, [name]: event.target.value})
         onSerch(event.target.value)
     }
+    const onClear = () =>{
+        setSearch({...search, searchTerm: ''})
+        setSerchData('')
+    } 
 
     const onSerch = (search) =>{
         if (search === '') {
@@ -44,26 +48,20 @@ function Search() {
         }
     }
     return (
-    <div>
-        <div class="row bm0">
-            <div class="col s12 m6">
-                <div class="card ">
-                    <div class="card-content  ">
-                        <h5 className='text-center'>Search</h5>
-                    <div class="row">
-                        <form class="col s12" autoComplete='off'>
-                            <div class="row singin-form">
-                                <div class="input-field col s11">
-                                    <input id="email" type="text"  onChange={handleChang('searchTerm')} value={searchTerm} class="validate" placeholder='Search' />
-                                    <i class="material-icons prefix" >search</i>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
+    <div className='card-content' >
+        <div style={{padding : '10px'}}>
+    <nav>
+    <div class="nav-wrapper">
+      <form autoComplete='off'>
+        <div class="input-field">
+          <input id="search" type="search" required onChange={handleChang('searchTerm')} value={searchTerm} />
+          <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+          <i class="material-icons" onClick={() => onClear()} >close</i>
         </div>
+      </form>
     </div>
+  </nav>
+  </div>
     <h5 className='text-center notice mt-5'>{noresult}</h5>
        {result}
         <BottomNav />

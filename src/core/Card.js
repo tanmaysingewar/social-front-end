@@ -34,7 +34,7 @@ function Card({index , cardData}) {
   let verified = true
   let vSvg = ''
   if (verified === true) {
-    vSvg = <VerifiedSvg/>
+    vSvg = <VerifiedSvg color={cardData.color.textColor}/>
     }else{
     vSvg = ''
 }
@@ -113,13 +113,13 @@ function Card({index , cardData}) {
         <div>
             <div class="row bm0">
               <div class="col s12 m6">
-              <div class="card bm0" key={index} style={{background : cardData.color.cardColor}}>
-              <div class="card-content bm0" >
+              <div class="card bm0" key={index} style={{background : cardData.color.cardColor }}>
+              <div class="card-content bm0">
               <div className='input-field'>
               <table border='2px solid'>
                 <td className='liketdwidth' style={{color : cardData.color.textColor}}><span>@{cardData.author.username}</span></td>
                 <td className='svgverify'>{vSvg}</td>
-                  <td className='collection-icon'><Bookmark /></td>
+                  <td className='collection-icon' ><div style={{backgroundColor: 'red'}}><Bookmark color={cardData.color.textColor}/></div></td>
               </table>
             </div>
             {/* <span class="card-title">Card Title</span> */}

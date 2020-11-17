@@ -11,11 +11,11 @@ function ProfileCard({data, post ,update}) {
 
     const { joines ,joined , description , posts  , name , email , username ,verified ,cardColor,textColor} = data
     if (verified) {
-        vSvg = <VerifiedSvg />
+        vSvg = <VerifiedSvg color={textColor} />
     }
 
     if(!update){
-        showEdit = <Link to='/edit/profile'><Edit/></Link>
+        showEdit = <Link to='/edit/profile'><Edit color={textColor}/></Link>
     }
     return (
         <div>

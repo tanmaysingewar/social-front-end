@@ -9,8 +9,8 @@ function AddPost() {
     const [values, setValues] = useState({
         title : '',
         post: '',
-        textColor : '',
-        cardColor: '',
+        textColor : 'black',
+        cardColor: 'white',
         success: false
     })
 
@@ -29,7 +29,7 @@ function AddPost() {
             return ''
         }
         //loding
-        createPost({title,post,color:{textColor, cardColor}},token,user._id)
+        createPost({postTitle : title,post,color:{textColor, cardColor}},token,user._id)
         .then(data =>{
              //loding close
         setValues({...values,success : true})
@@ -111,7 +111,9 @@ function AddPost() {
                 <div className='template' style={{background: 'linear-gradient(to right, #f953c6, #b91d73)'}}
                      onClick={()=> (setValues({...values,cardColor:'linear-gradient(to right, #f953c6, #b91d73)'}))}
                 ></div>
-                <div className='template' style={{background: 'linear-gradient(to right, #7f7fd5, #86a8e7, #91eae4)'}}></div>
+                <div className='template' style={{background: 'linear-gradient(to right bottom, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C)'}}
+                    onClick={()=> (setValues({...values,cardColor:'linear-gradient(to right bottom, #BF953F, #FCF6BA, #B38728, #AA771C)'}))}
+                ></div>
                 <div className='template' style={{background: 'linear-gradient(to right, #8360c3, #2ebf91)'}}></div>
                 <div className='template' style={{background: 'linear-gradient(to right, #009fff, #ec2f4b)'}}></div>
                 <div className='template' style={{background: 'linear-gradient(to left, #009fff, #ec2f4b)'}}></div>
@@ -125,14 +127,10 @@ function AddPost() {
                 <div className='template' style={{background: 'linear-gradient(to right, #2980b9, #6dd5fa, #6dd5fa)'}}></div>
                 <div className='template' style={{background: 'linear-gradient(to right, #2980b9, #6dd5fa, #6dd5fa)'}}></div>
                 <div className='template' style={{background: 'linear-gradient(to right, #2980b9, #6dd5fa, #6dd5fa)'}}></div>
-                
                 </div>
-                
                     </div>
                         </div>
                         </div>
-                       
-                        
                         </div>
                         </div>
 

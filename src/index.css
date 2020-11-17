@@ -166,6 +166,7 @@ input[type="color"]::-webkit-color-swatch {
 }
 .card{
   overflow-x: inherit;
+  padding: 0;
 }
 #postInput{
   overflow-wrap: break-word;
@@ -202,7 +203,25 @@ tr {
   margin-bottom: 10px;
 }
 
-.profile-nav{
+.profile-nav {
   padding: 0px;
   margin: 0px;
+}
+
+.profile-nav a{
+  padding: 0px;
+  margin: 0px;
+  color : #7f7f7f
+}
+.search-card-content{
+  padding: 5px;
+  margin: 5px;
+  /* border: 1px solid black; */
+  
+}
+.p2{
+  padding: 2px;
+}
+.m5{
+  margin: 8px;
 }
