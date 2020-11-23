@@ -20,21 +20,24 @@ function Search() {
         setSearch({...search, [name]: event.target.value})
         onSerch(event.target.value)
     }
+   
     const onClear = () =>{
         setSearch({...search, searchTerm: ''})
         setSerchData('')
     } 
 
+    
     const onSerch = (search) =>{
         if (search === '') {
            return setSerchData('')
         }
         // lOding query place here
         searchUser(search)
-        .then(data =>{
+            .then(data =>{
             setSerchData(data)
         })
-    }
+    }  
+    
 
     let result = ''
     let noresult =''

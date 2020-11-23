@@ -44,7 +44,7 @@ function AddPost() {
 
     return (
         <div>
-            <AddPostCard values={values} />
+            <AddPostCard values={values} username={user.username} />
             <div class="row">
             <div className='text-center' >
                     <a  class="btn" style={{backgroundColor: isdisable}} onClick={onSubmit}>Post</a>

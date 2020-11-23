@@ -42,6 +42,9 @@ body {
 }
 .liketdwidth{
   width: 15px;
+  padding: 0px;
+  padding-left: 5px;
+  padding-bottom: 0;
 }
 .likeIcon{
   color: rgba(35, 211, 158, 0.959);
@@ -68,11 +71,11 @@ body {
 }
 .liketable{
   margin-left: 5px;
+  margin-top: 5px;
 }
 
 .commentSection{
   margin: 0px;
-  padding-top: 0;
 }
 
 .singin-form{
@@ -224,4 +227,42 @@ tr {
 }
 .m5{
   margin: 8px;
+}
+.authername{
+  width: 15px;
+  padding-left: 0px;
+}
+.commentitextarea{
+  background-color: transparent;
+  border: none;
+  border-bottom: 0.5px solid #d2d2d2;
+  border-radius: 0;
+  outline: none;
+  height: auto;
+  width: 100%;
+  font-size: 15px;
+  margin: 0 0 8px 0;
+  padding: 5px 5px 5px 0;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+.description-text{
+  white-space: pre-line;
+}
+.svg{
+  height: 80px;
+  width: 80px;
+  float: right;
+}
+.dateoncard{
+  float: right;
+  font-size: 10px;
+}
+
+.navbar{
+  overflow: hidden;
+  background-color: #333;
+  position: fixed;
+  transition: top 0.3s;
+  height: 45px;
 }

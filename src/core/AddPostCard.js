@@ -1,6 +1,6 @@
 import React from 'react'
 
-function AddPostCard({values}) {
+function AddPostCard({values, username}) {
     const{title,post,textColor,cardColor,success} = values
 
     return (
@@ -12,7 +12,7 @@ function AddPostCard({values}) {
                         <div class="card-content " >
                             <div className='input-field'>
                                 <table border='2px solid'>
-                                    <td className='liketdwidth' style={{color : textColor}}><span>@tanmay</span></td>
+                                    <td className='liketdwidth' style={{color : textColor}}><span>@{username}</span></td>
                                     <td className='svgverify'></td>
                                     <td className='collection-icon'></td>
                                 </table>

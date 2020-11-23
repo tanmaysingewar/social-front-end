@@ -105,6 +105,8 @@ function EditProfile() {
        }
     }
 
+  
+
     return (
         <div className='row'>
             {/***Card here */}
@@ -121,19 +123,19 @@ function EditProfile() {
     <form class="col s12" autoComplete='off'>
       <div class="row">
         <div class="input-field col s12">
-          <input  id="disabled" type="text" class="validate" onChange={handleChange('username')} value={username}/>
+          <input type="text" class="validate" onChange={handleChange('username')} value={username} placeholder='Username'/>
         <span className='success'>{usernameMessage}</span>
         <span className='warning'>{usernameMessageWarn}</span>
         </div>
       </div>
       <div class="row">
         <div class="input-field col s12">
-          <input id="password" type="text" class="validate" onChange={handleChange('name')} value={name} />
+          <input type="text" class="validate" onChange={handleChange('name')} value={name} placeholder='Full Name' />
         </div>
       </div>
       <div class="row">
         <div class="input-field col s12">
-          <textarea id="email" type="email" class="materialize-textarea" onChange={handleChange('description')} value={description}/>
+          <textarea  type="email" class="materialize-textarea" onChange={handleChange('description')} value={description}  placeholder='Textarea' style={{height:'70px'}} />
         </div>
       </div>
     </form>
@@ -168,7 +170,7 @@ function EditProfile() {
                     onClick={()=> setData({...data,cardColor:'linear-gradient(to right, #2980b9, #6dd5fa, #6dd5fa)'})}
                 ></div>
                 <div className='template' style={{background: 'linear-gradient(to right, #ff0099, #493240)'}}
-                onClick={()=> setData({...data,cardColor:'linear-gradient(to right, #ff0099, #493240)'})}
+                    onClick={()=> setData({...data,cardColor:'linear-gradient(to right, #ff0099, #493240)'})}
                 ></div>
                 <div className='template' style={{background: 'linear-gradient(to right, #1f4037, #99f2c8)'}}
                 ></div>

@@ -4,7 +4,8 @@ import BottomNav from '../core/BottomNav'
 import { getPostByUserId, getUserById, isAuthincated } from '../auth/helper'
 import { Link } from 'react-router-dom'
 import ProfileCard from './ProfileCard'
-
+import { PostCounts, savedPosts } from './helper'
+import TopNavBar from '../core/TopNavBar'
 
 function Profile() {
     const { user, token } = isAuthincated()
@@ -24,7 +25,10 @@ function Profile() {
 
     const [post, setPost] = useState([])
 
-    console.log(post,'Post State 1')
+    const [counts, setCounts] = useState('')
+
+    const [highlight, setHighlight] = useState('all')
+
 
     //****Verified will save on user database only and will be populated through user id in post request */
     const { joines ,joined , description , posts , name , email , username ,verified ,textColor ,cardColor ,loading} = data
@@ -50,17 +54,20 @@ function Profile() {
         })
         getPostByUserId(user._id , token)
         .then(data =>{
-                console.log(data)
             setPost([data])
-            console.log([data].length)
+            console.log(data)
+        })
+
+        PostCounts(user._id , token)
+        .then(data =>{
+           setCounts(data) 
         })
     }, [])
+    console.log(counts)
 
-    const onClickMentions = () =>{
-        setPost([])
-    }
 
-    const onClickPost = () =>{
+    const onClickAllPost = () =>{
+        setHighlight('all')
         getPostByUserId(user._id , token)
         .then(data =>{
                 console.log(data)
@@ -69,19 +76,68 @@ function Profile() {
         })
     }
 
-    const onClickSave = () =>{
+    const onClickPost = () =>{
+        setHighlight('posts')
+        getPostByUserId(user._id , token)
+        .then(data =>{
+                console.log(data)
+            setPost([data])
+            console.log([data].length)
+        })
+    }
+
+    const onClickMentions = () =>{
+        setHighlight('mentions')
         setPost([])
     }
+
+    const onClickSave = () =>{
+        setHighlight('saved')
+        savedPosts(user._id , token)
+        .then(data =>{
+            console.log(data.savedPost)
+            setPost([data.savedPost])
+        })
+    }
+
+    let allHighLight = {color : '#7f7f7f'}
+    let postsHighLight = {color : '#7f7f7f'}
+    let mentionHighLight = {color : '#7f7f7f'}
+    let savedHighLight = {color : '#7f7f7f'}
+
+    if(highlight){
+        if (highlight === 'all') {
+             allHighLight = {color : '#252d2d'}
+             postsHighLight = {color : '#7f7f7f'}
+             mentionHighLight = {color : '#7f7f7f'}
+             savedHighLight = {color : '#7f7f7f'}
+        }
+        if (highlight === 'posts') {
+            allHighLight = {color : '#7f7f7f'}
+            postsHighLight = {color : '#252d2d'}
+            mentionHighLight = {color : '#7f7f7f'}
+            savedHighLight = {color : '#7f7f7f'}
+       }
+       if (highlight === 'mentions') {
+            allHighLight = {color : '#7f7f7f'}
+            postsHighLight = {color : '#7f7f7f'}
+            mentionHighLight = {color : '#252d2d'}
+            savedHighLight = {color : '#7f7f7f'}
+        }if (highlight === 'saved') {
+            allHighLight = {color : '#7f7f7f'}
+            postsHighLight = {color : '#7f7f7f'}
+            mentionHighLight = {color : '#7f7f7f'}
+            savedHighLight = {color : '#252d2d'}
+}
+    }
+
 
     let noPost =''
     
     if (post.map((postData)=>(postData.length)) == 0) {
         noPost ='Not yet posted'
     }
-    let postlength =''
-    if(post){
-        postlength = post.map((postData)=>(postData.length)) 
-    }
+    
     
     if(loading){
         return (
@@ -93,12 +149,14 @@ function Profile() {
         )
     }else{
         return (
-            <div>
+            <div style={{marginTop:'45px'}}>
+                
                 <div class="row">
                     <div class="col s12 m6">
                         {/***Crad here */}
                         <ProfileCard data={data} post={post} />
                         {/* <div class="card bm0" > */}
+                        
                         
                             {/* </div> */}
                     </div>{
@@ -107,16 +165,16 @@ function Profile() {
                     <table className='bm0 profile-nav'>
                                 <tr>
                                     <th className='text-center  profile-nav ' style={{paddingLeft: '5px'}}>
-                                    <a onClick={() => onClickPost()}  >All {postlength}</a>
+                                    <a onClick={() => onClickAllPost()} style={allHighLight}  >All {counts.all}</a>
                                     </th>
                                     <th className='text-center  profile-nav'>
-                                    <a onClick={() => onClickPost()} style={{color : '#252d2d'}} >Posts {postlength}</a>
+                                    <a onClick={() => onClickPost()} style={postsHighLight} >Posts {counts.posts}</a>
                                     </th>
                                     <th className='text-center  profile-nav'>
-                                        <a onClick={()=> onClickMentions()}  >Mentions</a>
+                                        <a onClick={()=> onClickMentions()} style={mentionHighLight} >Mentions {counts.mentoins}</a>
                                     </th>
                                     <th className='text-center  profile-nav'>
-                                        <a onClick={() => onClickSave()}  >Saved</a>
+                                        <a onClick={() => onClickSave()} style={savedHighLight} >Saved {counts.saved}</a>
                                     </th>
                                 </tr>
                             </table>
@@ -160,6 +218,7 @@ function Profile() {
                         </div>
                     </div>
                 </div>
+                <TopNavBar />
                 <BottomNav />
                 </div>
         )

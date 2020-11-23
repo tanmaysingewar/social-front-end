@@ -1,11 +1,20 @@
 import React from 'react'
 
-function Bookmark({color = 'black'}) {
-    return (
-        <>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill={color} width="20px" height="20px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M0 0h24v24H0V0z" fill="none"/><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6z"/><path d="M20 2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 10l-2.5-1.5L15 12V4h5v8z"/></svg>
-        </>
-    )
+function Bookmark({color = 'black', saved}) {
+    if(saved === 'saved'){
+        return (
+            <>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill={color} width="24px" height="24px"><path d="M0 0h24v24H0z" fill="none"/><path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>
+            </>
+        )
+        
+    }else{
+        return (
+            <>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill={color} width="24px" height="24px"><path d="M0 0h24v24H0z" fill="none"/><path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2zm0 15l-5-2.18L7 18V5h10v13z"/></svg>
+            </>
+        )
+    }
 }
 
 export default Bookmark

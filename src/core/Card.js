@@ -1,17 +1,17 @@
 import React,{useState,useEffect} from 'react'
 import { isAuthincated} from '../auth/helper'
 import { commentPost, islikedPost, likePost } from '../user/helper'
+import { isPostSaved, savePost } from './helper'
 import Bookmark from './svg/Bookmark'
 import VerifiedSvg from './svg/Verified'
-
-
-
 
 function Card({index , cardData}) {
 
   const {user, token } = isAuthincated()
 
   const [like, setLike] = useState('')
+
+  const [save, setSave] = useState('')
 
   const [comments, setComment] = useState({
     comment: ''
@@ -28,7 +28,14 @@ function Card({index , cardData}) {
     .then(data =>{
       setLike(data.liked)
     })
-  }, [])
+
+    isPostSaved(cardData._id, user._id, token)
+    .then(data => {
+      setSave(data.msg)
+    })
+  }, [cardData._id])
+
+  console.log(save)
 
   //Todo: verified should come here also
   let verified = true
@@ -86,27 +93,38 @@ function Card({index , cardData}) {
     setComment({...comment,comment:''})
   }
 
-  // const dateCompiler =(gotdate) =>{
-  //   var date = gotdate
-  //   var hours = date.getHours();
-  //   var minutes = date.getMinutes();
+  let bookmarkcolor =''
+  if(save == 'saved'){
+    bookmarkcolor = 'blue'
+  }else{
+    bookmarkcolor = cardData.color.textColor
+  }
 
-  //   // Check whether AM or PM 
-  //   var newformat = hours >= 12 ? 'PM' : 'AM';
+  const onSavePost = () =>{
+    if(save == 'unsaved'){
+      setSave('saved')
+    }
+    if(save == 'saved'){
+      setSave('unsaved')
+    }
+    savePost(cardData._id, user._id, token)
+    .then(data =>{
+      // setSave
+    })
+  }
 
-  //   // Find current hour in AM-PM Format 
-  //   hours = hours % 12;
-
-  //   // To display "0" as "12" 
-  //   hours = hours ? hours : 12;
-  //   minutes = minutes < 10 ? '0' + minutes : minutes;
-
-  //   date = hours + ':' + minutes + ' ' + newformat;
-
-  //   console.log(date)
-  // }
-
-  // dateCompiler(cardData.createdAt)
+  let date = new Date(cardData.createdAt);
+  let year = date.getFullYear();
+  let month = date.getMonth()+1;
+  let dt = date.getDate();
+  
+  if (dt < 10) {
+    dt = '0' + dt;
+  }
+  if (month < 10) {
+    month = '0' + month;
+  }
+  
 
 
     return (
@@ -117,25 +135,26 @@ function Card({index , cardData}) {
               <div class="card-content bm0">
               <div className='input-field'>
               <table border='2px solid'>
-                <td className='liketdwidth' style={{color : cardData.color.textColor}}><span>@{cardData.author.username}</span></td>
+                <td className='authername' style={{color : cardData.color.textColor}}><span>@{cardData.author.username}</span></td>
                 <td className='svgverify'>{vSvg}</td>
-                  <td className='collection-icon' ><div style={{backgroundColor: 'red'}}><Bookmark color={cardData.color.textColor}/></div></td>
+                  <td className='collection-icon' ><div onClick={() => onSavePost()}><Bookmark color={cardData.color.textColor} saved={save}/></div></td>
               </table>
             </div>
-            {/* <span class="card-title">Card Title</span> */}
+            <span class="card-title" style={{color : cardData.color.textColor}}>{cardData.postTitle}</span>
             <p class="justify" style={{color : cardData.color.textColor}}>{cardData.post}</p><br/>
+            <p className='dateoncard'  style={{color : cardData.color.textColor}}>{dt+'-' + month + '-'+year}</p>
           </div>
         </div>
         <table className='liketable'>
               <td className='liketdwidth' onClick={()=> onLike(likeclass)}><i className={likeclass}>thumb_up</i></td>
               <td><spam>{cardData.likes.count}</spam></td>
         </table>
-          <div class=" col s11 ">
+          <div class="col s11 ">
             {/***Add link to the see all comment page  */}
-          <span>{commentData}</span>
+          <span style={{fontSize : '13px'}}>{commentData}</span>
               <div className='input-field commentSection'>
-                <input   class="materialize-textarea" data-length="100" placeholder='Comment' onChange={handleChange('comment')} value={comment} autoComplete='off' />
-                <i class="material-icons prefix" onClick={onComment} >send</i>
+                <input className="commentitextarea" data-length="100" placeholder='Comment' onChange={handleChange('comment')} value={comment} autoComplete='off' />
+                <i class="material-icons prefix" onClick={onComment}  style={{fontSize : '28px',top : '0'}}>send</i>
               </div>
           </div>
       </div>
