@@ -29,7 +29,6 @@ function EditProfile() {
     useEffect(() => {
         getUserById( user._id , token)
         .then(data =>{
-            console.log(data)
             setData({
                 joines : data.joines,
                 joined : data.joined,
@@ -58,7 +57,6 @@ function EditProfile() {
         }else{
           checkUsername({username})
         .then(data =>{
-            console.log(data)
           if (data.error) {
             setCheck(data.error)
           }else{

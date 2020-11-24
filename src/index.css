@@ -29,13 +29,6 @@ body {
   transition: background-color 0.1s ease-in-out;
 }
 
-.nav__link:hover {
-  background-color: #eeeeee;
-}
-
-.nav__link--active {
-  color: #485a8a;
-}
 
 .nav__icon {
   font-size: 10px;
@@ -265,4 +258,13 @@ tr {
   position: fixed;
   transition: top 0.3s;
   height: 45px;
+}
+.delete-ok-button{
+  float: right ;
+  margin-top: -5px
+}
+
+.delete-cancel {
+  float: right;
+  padding-right:  10px;
 }

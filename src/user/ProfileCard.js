@@ -14,7 +14,6 @@ function ProfileCard({data ,update}) {
     if(!update){
         showEdit = <Link to='/edit/profile'><Edit color={textColor}/></Link>
     }
-    console.log(description)
     return (
         <div>
            <div class="card " style={{background : cardColor }}>

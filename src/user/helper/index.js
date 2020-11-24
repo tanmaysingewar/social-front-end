@@ -40,7 +40,6 @@ export const commentPost = (postId , token, comment)=>{
     body: JSON.stringify(comment)
 })
 .then(res =>{
-    console.log(res)
     return res.json()
 })
 .catch(err => console.log(err))}
@@ -56,7 +55,6 @@ export const updateProfile = (userId , token, data)=>{
     body: JSON.stringify(data)
 })
 .then(res =>{
-    console.log(res)
     return res.json()
 })
 .catch(err => console.log(err))}

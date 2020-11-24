@@ -67,7 +67,6 @@ function Search() {
   </div>
     <h5 className='text-center notice mt-5'>{noresult}</h5>
        {result}
-        <BottomNav />
         </div>
     )
 }

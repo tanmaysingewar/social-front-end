@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { getAllPost, isAuthincated } from '../auth/helper'
-import BottomNav from './BottomNav'
 import Card from './Card'
-import TopNavBar from './TopNavBar'
 
 function Home() {
     const { user, token } = isAuthincated()
@@ -30,9 +28,6 @@ function Home() {
                <div >
                     {load}
                </div>
-                
-                <TopNavBar />
-                    <BottomNav />
             </div>
         )
     }

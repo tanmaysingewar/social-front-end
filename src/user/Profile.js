@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import Card from '../core/Card'
-import BottomNav from '../core/BottomNav'
 import { getPostByUserId, getUserById, isAuthincated } from '../auth/helper'
 import { Link } from 'react-router-dom'
 import ProfileCard from './ProfileCard'
 import { PostCounts, savedPosts } from './helper'
-import TopNavBar from '../core/TopNavBar'
 
 function Profile() {
     const { user, token } = isAuthincated()
@@ -55,7 +53,6 @@ function Profile() {
         getPostByUserId(user._id , token)
         .then(data =>{
             setPost([data])
-            console.log(data)
         })
 
         PostCounts(user._id , token)
@@ -63,16 +60,13 @@ function Profile() {
            setCounts(data) 
         })
     }, [])
-    console.log(counts)
 
 
     const onClickAllPost = () =>{
         setHighlight('all')
         getPostByUserId(user._id , token)
         .then(data =>{
-                console.log(data)
             setPost([data])
-            console.log([data].length)
         })
     }
 
@@ -80,9 +74,7 @@ function Profile() {
         setHighlight('posts')
         getPostByUserId(user._id , token)
         .then(data =>{
-                console.log(data)
             setPost([data])
-            console.log([data].length)
         })
     }
 
@@ -95,7 +87,6 @@ function Profile() {
         setHighlight('saved')
         savedPosts(user._id , token)
         .then(data =>{
-            console.log(data.savedPost)
             setPost([data.savedPost])
         })
     }
@@ -133,9 +124,11 @@ function Profile() {
 
 
     let noPost =''
+    let createPostStyle = 'btn-floating btn-large black'
     
     if (post.map((postData)=>(postData.length)) == 0) {
         noPost ='Not yet posted'
+        createPostStyle = 'btn-floating btn-large black pulse'
     }
     
     
@@ -147,6 +140,9 @@ function Profile() {
             </div>
             </div>
         )
+
+    
+
     }else{
         return (
             <div style={{marginTop:'45px'}}>
@@ -155,38 +151,26 @@ function Profile() {
                     <div class="col s12 m6">
                         {/***Crad here */}
                         <ProfileCard data={data} post={post} />
-                        {/* <div class="card bm0" > */}
-                        
-                        
-                            {/* </div> */}
-                    </div>{
-                        //**** we are going to create seprate route for getting count of (how many post ,mentions and saved are there) all posts*/
-                    }
+                    </div>
                     <table className='bm0 profile-nav'>
                                 <tr>
                                     <th className='text-center  profile-nav ' style={{paddingLeft: '5px'}}>
-                                    <a onClick={() => onClickAllPost()} style={allHighLight}  >All {counts.all}</a>
+                                    <a onClick={() => onClickAllPost()} style={allHighLight}  >All </a>
                                     </th>
                                     <th className='text-center  profile-nav'>
                                     <a onClick={() => onClickPost()} style={postsHighLight} >Posts {counts.posts}</a>
                                     </th>
                                     <th className='text-center  profile-nav'>
-                                        <a onClick={()=> onClickMentions()} style={mentionHighLight} >Mentions {counts.mentoins}</a>
+                                        <a onClick={()=> onClickMentions()} style={mentionHighLight} >Mentions </a>
                                     </th>
                                     <th className='text-center  profile-nav'>
-                                        <a onClick={() => onClickSave()} style={savedHighLight} >Saved {counts.saved}</a>
+                                        <a onClick={() => onClickSave()} style={savedHighLight} >Saved  </a>
                                     </th>
                                 </tr>
                             </table>
                 </div>
                 
         <h5 className='text-center notice mt-5'>{noPost}</h5>
-    
-                {/***Cards which user will post like
-                 * <Post />
-                 * <Mentions />
-                 * <Saved />
-                */}
                 {/* <div class="progress">
                 <div class="indeterminate"></div>
             </div> */}
@@ -203,7 +187,7 @@ function Profile() {
                 }
                 {/***create post buttton */}
                 <div class="fixed-action-btn">
-                    <Link className='btn-floating btn-large black pulse' to='/post'>
+                    <Link className={createPostStyle} to='/post'>
                         <i class="large material-icons ">mode_edit</i>
                     </Link>
                 </div>
@@ -218,9 +202,7 @@ function Profile() {
                         </div>
                     </div>
                 </div>
-                <TopNavBar />
-                <BottomNav />
-                </div>
+            </div>
         )
     }   
 }

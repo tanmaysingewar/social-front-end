@@ -1,12 +1,15 @@
 import React from 'react'
 import {BrowserRouter, Switch, Route} from 'react-router-dom'
 import AddPost from './core/AddPost'
+import BottomNav from './core/BottomNav'
 import Home from './core/Home'
+import TopNavBar from './core/TopNavBar'
 import EditProfile from './user/EditProfile'
 import Profile from './user/Profile'
 import Search from './user/Search'
 import Singin from './user/Singin'
 import Singup from './user/Singup'
+
 
 function Routes() {
     return (
@@ -21,6 +24,8 @@ function Routes() {
                     <Route path='/add/post' exact component={AddPost} />
                     <Route path='/edit/profile' exact component={EditProfile} />
             </Switch>
+            <BottomNav />
+            <TopNavBar />
         </BrowserRouter>
     )
 }

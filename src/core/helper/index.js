@@ -45,3 +45,20 @@ export const isPostSaved = (postId , userId , token) =>{
     })
     .catch(err => console.log(err))
 }
+
+
+
+export const ondeletePost = (postId , userId , token) =>{
+    return fetch(`${API}/post/${postId}/${userId}`,{
+        method: "DELETE",
+        headers:{
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization : `Bearer ${token}`
+        }
+    })
+    .then(res =>{
+        return res.json()
+    })
+    .catch(err => console.log(err))
+}

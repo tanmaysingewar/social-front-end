@@ -92,7 +92,6 @@ export const getPostByUserId = (userId, token)=>{
     }
 })
 .then(res =>{
-    console.log(res)
     return res.json()
 })
 .catch(err => console.log(err))}
