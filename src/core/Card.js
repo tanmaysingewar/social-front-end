@@ -164,7 +164,7 @@ function Card({index , cardData}) {
                 render = 
                   <div class="row bm0">
                     <div class="col s12 m6">
-                      <div class="card bm0" key={index} >
+                      <div class=" bm0" key={index} >
                         <div style={{padding : '10px'}}>
                               <span>Delete this post!!</span>
                               <button  className='btn-small delete-ok-button' onClick={() => ondelete()} >Ok</button>

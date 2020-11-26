@@ -1,6 +1,5 @@
-import React,{useState, useEffect} from 'react'
+import React,{useState} from 'react'
 import { searchUser } from '../auth/helper'
-import BottomNav from '../core/BottomNav'
 import SerchReasult from '../core/SerchReasult'
 
 
@@ -14,7 +13,6 @@ function Search() {
 
     const { searchTerm } = search
 
-    console.log(searchData)
 
     const handleChang = (name) => event =>{
         setSearch({...search, [name]: event.target.value})

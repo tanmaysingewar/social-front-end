@@ -4,14 +4,15 @@ import { getPostByUserId, getUserById, isAuthincated } from '../auth/helper'
 import { Link } from 'react-router-dom'
 import ProfileCard from './ProfileCard'
 import { PostCounts, savedPosts } from './helper'
+import Deatils from './Deatils'
 
 function Profile() {
     const { user, token } = isAuthincated()
     const [data, setData] = useState({
+        _id : '',
         joines : '',
         joined : '',
         description : '',
-        posts : '',
         name : '',
         email : '',
         username : '',
@@ -27,9 +28,11 @@ function Profile() {
 
     const [highlight, setHighlight] = useState('all')
 
+    const [clickedMore, setClickedMore] = useState(false)
+
 
     //****Verified will save on user database only and will be populated through user id in post request */
-    const { joines ,joined , description , posts , name , email , username ,verified ,textColor ,cardColor ,loading} = data
+    const { joines ,joined , description , name , email , username ,verified ,textColor ,cardColor ,loading, _id} = data
 
 
     useEffect(() => {
@@ -37,10 +40,10 @@ function Profile() {
         getUserById( user._id , token)
         .then(data =>{
             setData({
-                joines : data.joines,
-                joined : data.joined,
+                _id : data._id,
+                joines : data.joines.count,
+                joined : data.joined.count,
                 description : data.description,
-                posts : data.posts,
                 name : data.name,
                 email : data.email,
                 username : data.username ,
@@ -63,6 +66,7 @@ function Profile() {
 
 
     const onClickAllPost = () =>{
+        setClickedMore(false)
         setHighlight('all')
         getPostByUserId(user._id , token)
         .then(data =>{
@@ -71,6 +75,7 @@ function Profile() {
     }
 
     const onClickPost = () =>{
+        setClickedMore(false)
         setHighlight('posts')
         getPostByUserId(user._id , token)
         .then(data =>{
@@ -79,16 +84,39 @@ function Profile() {
     }
 
     const onClickMentions = () =>{
+        setClickedMore(false)
         setHighlight('mentions')
         setPost([])
     }
 
     const onClickSave = () =>{
+        setClickedMore(false)
         setHighlight('saved')
         savedPosts(user._id , token)
         .then(data =>{
             setPost([data.savedPost])
         })
+    }
+
+    const onClickMore = ( ) =>{
+        setHighlight('saved')
+        setPost([' '])
+        setClickedMore(true)
+    }
+
+    let rednderData =''
+
+    if(!clickedMore){
+        rednderData = post.map((postData)=>(
+            postData.map((cardData,index)=>(
+                <Card 
+                key={index}
+                cardData={cardData}
+                 />
+            ))
+        ))
+    }else{
+        rednderData = <Deatils data={data} />
     }
 
     let allHighLight = {color : '#7f7f7f'}
@@ -143,47 +171,56 @@ function Profile() {
 
     
 
-    }else{
+    }
+    
+    else{
+        let showSavedPost = ''
+        if(_id === user._id){
+            showSavedPost =<th className='text-center  profile-nav'>
+            <a onClick={() => onClickSave()} style={savedHighLight} >Saved  </a>
+        </th>
+        }else{
+            showSavedPost =<th className='text-center  profile-nav'>
+                     <a onClick={() => onClickMore()} style={savedHighLight} > More  </a>
+                </th>
+        }
         return (
-            <div style={{marginTop:'45px'}}>
+            <div >
                 
                 <div class="row">
                     <div class="col s12 m6">
                         {/***Crad here */}
                         <ProfileCard data={data} post={post} />
                     </div>
-                    <table className='bm0 profile-nav'>
-                                <tr>
-                                    <th className='text-center  profile-nav ' style={{paddingLeft: '5px'}}>
+                    <table className='bm0 profile-nav' >
+                                <tr  >
+                                    <th className='text-center  profile-nav ' style={{paddingLeft: '5px'}} >
                                     <a onClick={() => onClickAllPost()} style={allHighLight}  >All </a>
                                     </th>
-                                    <th className='text-center  profile-nav'>
+                                    <th className='text-center  profile-nav'   >
                                     <a onClick={() => onClickPost()} style={postsHighLight} >Posts {counts.posts}</a>
                                     </th>
-                                    <th className='text-center  profile-nav'>
+                                    <th className='text-center  profile-nav' >
                                         <a onClick={()=> onClickMentions()} style={mentionHighLight} >Mentions </a>
                                     </th>
-                                    <th className='text-center  profile-nav'>
-                                        <a onClick={() => onClickSave()} style={savedHighLight} >Saved  </a>
-                                    </th>
+                                    {showSavedPost}
                                 </tr>
                             </table>
                 </div>
                 
         <h5 className='text-center notice mt-5'>{noPost}</h5>
+    
+                {/***Cards which user will post like
+                 * <Post />
+                 * <Mentions />
+                 * <Saved />
+                */}
                 {/* <div class="progress">
                 <div class="indeterminate"></div>
             </div> */}
                 {/*** Print posts here */}
                 {
-                    post.map((postData)=>(
-                        postData.map((cardData,index)=>(
-                            <Card 
-                            key={index}
-                            cardData={cardData}
-                             />
-                        ))
-                    ))
+                   rednderData
                 }
                 {/***create post buttton */}
                 <div class="fixed-action-btn">
