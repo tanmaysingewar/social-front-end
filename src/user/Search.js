@@ -49,7 +49,7 @@ function Search() {
         }
     }
     return (
-    <div className='card-content' >
+    <div className='card-content' style={{marginTop : '45px'}} >
         <div style={{padding : '10px'}}>
     <nav>
     <div class="nav-wrapper">

@@ -1,7 +1,11 @@
 import React,{useState} from 'react'
 import { Link } from 'react-router-dom'
+import { isAuthincated } from '../auth/helper'
+
 
 function BottomNav() {
+
+    const {user} = isAuthincated()
 
     const [highlight, setHighlight] = useState(true)
 
@@ -49,7 +53,7 @@ function BottomNav() {
                     <Link to='/' class="nav__link">
                     <i onClick={() => setHighlight('notify')} style={notify} class="material-icons nav__icon">notification_important</i>
                     </Link>
-                    <Link to='/profile' class="nav__link">
+                    <Link to={'/profile/'+ user._id }class="nav__link">
                     <i onClick={() => setHighlight('person')} style={person} class="material-icons nav__icon">person</i>
                     </Link>
                 </nav>

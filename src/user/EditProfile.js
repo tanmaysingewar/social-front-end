@@ -26,8 +26,6 @@ function EditProfile() {
 
     const { joines ,joined , description   , name , email , username ,verified ,cardColor ,textColor ,success} = data
 
-    console.log(data)
-
     useEffect(() => {
         getUserById( user._id , token)
         .then(data =>{
@@ -102,7 +100,7 @@ function EditProfile() {
     }
     const performRedirect = () =>{
        if (success) {
-        return <Redirect to='/profile' />
+        return <Redirect to={'/profile/'+user._id} />
        }
     }
 

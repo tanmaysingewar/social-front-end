@@ -18,7 +18,7 @@ function Routes() {
                     <Route path='/' exact component={Home} />
                     <Route path='/singin' exact component={Singin} />
                     <Route path='/singup' exact component={Singup} />
-                    <Route path='/profile' exact component={Profile} />
+                    <Route path='/profile/:value' exact component={Profile} />
                     <Route path='/search' exact component={Search} />
                     <Route path='/post' exact component={AddPost} />
                     <Route path='/add/post' exact component={AddPost} />

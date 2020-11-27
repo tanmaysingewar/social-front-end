@@ -86,3 +86,31 @@ export const savedPosts = (UserId , token) =>{
     return res.json()
 })
 .catch(err => console.log(err))}
+
+export const isUserJoined = (UserId , token) =>{
+    return fetch(`${API}/user/check/join/${UserId}`,{
+        method : 'Post',
+        headers:{
+            Accept: 'application/json',
+            'Content-Type' : 'application/json',
+            Authorization : `Bearer ${token}`
+        }
+    })
+.then(res =>{
+    return res.json()
+})
+.catch(err => console.log(err))}
+
+export const JoinUser = (UserId , token) =>{
+    return fetch(`${API}/user/join/${UserId}`,{
+        method : 'Post',
+        headers:{
+            Accept: 'application/json',
+            'Content-Type' : 'application/json',
+            Authorization : `Bearer ${token}`
+        }
+    })
+.then(res =>{
+    return res.json()
+})
+.catch(err => console.log(err))}

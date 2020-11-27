@@ -38,7 +38,7 @@ function AddPost() {
 
     const performRedirect = ()=>{
         if (success) {
-          return <Redirect to='/profile' />
+          return <Redirect to={'/profile/'+ user._id} />
         }
     }
 

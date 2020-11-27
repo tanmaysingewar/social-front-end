@@ -6,7 +6,7 @@ import ProfileCard from './ProfileCard'
 import { PostCounts, savedPosts } from './helper'
 import Deatils from './Deatils'
 
-function Profile() {
+function Profile(props) {
     const { user, token } = isAuthincated()
     const [data, setData] = useState({
         _id : '',
@@ -34,10 +34,17 @@ function Profile() {
     //****Verified will save on user database only and will be populated through user id in post request */
     const { joines ,joined , description , name , email , username ,verified ,textColor ,cardColor ,loading, _id} = data
 
-
+    
+    let profileid = ''
+    if(props.match.params.value){
+        profileid = props.match.params.value
+    }else{
+        profileid = user._id
+    }
     useEffect(() => {
+        
         setData({...data,loading :true})
-        getUserById( user._id , token)
+        getUserById( profileid , token)
         .then(data =>{
             setData({
                 _id : data._id,
@@ -53,31 +60,31 @@ function Profile() {
                 loading : false
             })
         })
-        getPostByUserId(user._id , token)
+        getPostByUserId(profileid , token)
         .then(data =>{
             setPost([data])
         })
 
-        PostCounts(user._id , token)
+        PostCounts(profileid , token)
         .then(data =>{
            setCounts(data) 
         })
-    }, [])
+    }, [profileid])
 
 
-    const onClickAllPost = () =>{
+    const onClickAllPost =  () =>{
         setClickedMore(false)
         setHighlight('all')
-        getPostByUserId(user._id , token)
+        getPostByUserId(profileid , token)
         .then(data =>{
             setPost([data])
         })
     }
 
-    const onClickPost = () =>{
-        setClickedMore(false)
+    const onClickPost = async () =>{
+       await setClickedMore(false)
         setHighlight('posts')
-        getPostByUserId(user._id , token)
+        getPostByUserId(profileid , token)
         .then(data =>{
             setPost([data])
         })
@@ -92,32 +99,19 @@ function Profile() {
     const onClickSave = () =>{
         setClickedMore(false)
         setHighlight('saved')
-        savedPosts(user._id , token)
+        savedPosts(profileid , token)
         .then(data =>{
             setPost([data.savedPost])
         })
     }
 
     const onClickMore = ( ) =>{
-        setHighlight('saved')
-        setPost([' '])
         setClickedMore(true)
+        setHighlight('saved')
+        setPost([])
     }
 
-    let rednderData =''
-
-    if(!clickedMore){
-        rednderData = post.map((postData)=>(
-            postData.map((cardData,index)=>(
-                <Card 
-                key={index}
-                cardData={cardData}
-                 />
-            ))
-        ))
-    }else{
-        rednderData = <Deatils data={data} />
-    }
+   
 
     let allHighLight = {color : '#7f7f7f'}
     let postsHighLight = {color : '#7f7f7f'}
@@ -154,9 +148,39 @@ function Profile() {
     let noPost =''
     let createPostStyle = 'btn-floating btn-large black'
     
-    if (post.map((postData)=>(postData.length)) == 0) {
+    if (post === [' ']) {
+        noPost =''
+    }else if ( post.map((postData)=>(postData.length)) == 0 ) {
         noPost ='Not yet posted'
         createPostStyle = 'btn-floating btn-large black pulse'
+    }
+    if(user._id !== profileid){
+        createPostStyle = 'displayNone'
+    }
+
+    let rednderData =''
+
+    if(!clickedMore){
+        
+        console.log(post)
+        console.log(clickedMore)
+        // if(!post.map()){
+        //     return rednderData =''
+        // }
+        rednderData =<div>
+        <h5 className='text-center notice mt-5'>{noPost}</h5>
+        {post.map((postData)=>(
+            postData.map((cardData,index)=>(
+                <Card 
+                key={index}
+                cardData={cardData}
+                 />
+            ))
+        ))}
+        </div>
+    }
+    else{
+        rednderData = <Deatils data={data} />
     }
     
     
@@ -175,7 +199,7 @@ function Profile() {
     
     else{
         let showSavedPost = ''
-        if(_id === user._id){
+        if(user._id === profileid){
             showSavedPost =<th className='text-center  profile-nav'>
             <a onClick={() => onClickSave()} style={savedHighLight} >Saved  </a>
         </th>
@@ -207,14 +231,6 @@ function Profile() {
                                 </tr>
                             </table>
                 </div>
-                
-        <h5 className='text-center notice mt-5'>{noPost}</h5>
-    
-                {/***Cards which user will post like
-                 * <Post />
-                 * <Mentions />
-                 * <Saved />
-                */}
                 {/* <div class="progress">
                 <div class="indeterminate"></div>
             </div> */}

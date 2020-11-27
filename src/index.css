@@ -160,6 +160,9 @@ input[type="color"]::-webkit-color-swatch {
   border-radius: 40px;
 	border: none;
 }
+input {
+  border:  none;
+}
 .card{
   overflow-x: inherit;
   padding: 0;
@@ -267,4 +270,14 @@ tr {
 .delete-cancel {
   float: right;
   padding-right:  10px;
+}
+
+.displayNone {
+  display: none;
+}
+
+
+.joinbth{
+  width: 100% ;
+  margin-bottom: 10px;
 }
