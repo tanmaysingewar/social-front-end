@@ -53,7 +53,7 @@ function BottomNav() {
                     <Link to='/' class="nav__link">
                     <i onClick={() => setHighlight('notify')} style={notify} class="material-icons nav__icon">notification_important</i>
                     </Link>
-                    <Link to={'/profile/'+ user._id }class="nav__link">
+                    <Link to={'/profile/me' }class="nav__link">
                     <i onClick={() => setHighlight('person')} style={person} class="material-icons nav__icon">person</i>
                     </Link>
                 </nav>

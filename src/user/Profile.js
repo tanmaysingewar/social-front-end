@@ -19,7 +19,8 @@ function Profile(props) {
         verified : false,
         textColor: '',
         cardColor: '',
-        loading : false
+        loading : false,
+        intLoding : false
     })
 
     const [post, setPost] = useState([])
@@ -32,11 +33,14 @@ function Profile(props) {
 
 
     //****Verified will save on user database only and will be populated through user id in post request */
-    const { joines ,joined , description , name , email , username ,verified ,textColor ,cardColor ,loading, _id} = data
+    const { joines ,joined , description , name , email , username ,verified ,textColor ,cardColor ,loading,intLoding, _id} = data
 
     
     let profileid = ''
-    if(props.match.params.value){
+    if(props.match.params.value === 'me'){
+        profileid = user._id
+    }
+    else if(props.match.params.value){
         profileid = props.match.params.value
     }else{
         profileid = user._id
@@ -44,7 +48,8 @@ function Profile(props) {
     useEffect(() => {
         
         setData({...data,loading :true})
-        getUserById( profileid , token)
+        setTimeout(() => {
+            getUserById( profileid , token)
         .then(data =>{
             setData({
                 _id : data._id,
@@ -56,8 +61,7 @@ function Profile(props) {
                 username : data.username ,
                 verified : true,
                 textColor: data.color.textColor,
-                cardColor: data.color.cardColor,
-                loading : false
+                cardColor: data.color.cardColor
             })
         })
         getPostByUserId(profileid , token)
@@ -69,46 +73,67 @@ function Profile(props) {
         .then(data =>{
            setCounts(data) 
         })
+        }, 2000);
     }, [profileid])
 
 
     const onClickAllPost =  () =>{
         setClickedMore(false)
-        setHighlight('all')
-        getPostByUserId(profileid , token)
-        .then(data =>{
-            setPost([data])
-        })
+            setHighlight('all')
+        setData({...data,intLoding : true})
+        setTimeout(() => {
+            getPostByUserId(profileid , token)
+            .then(data0 =>{
+                setPost([data0])
+                setData({...data,intLoding : false})
+            })  
+        }, 2000); 
     }
 
-    const onClickPost = async () =>{
-       await setClickedMore(false)
+    const onClickPost =  () =>{
+        setClickedMore(false)
         setHighlight('posts')
+        setData({...data,intLoding : true})
+        setTimeout(() => {
         getPostByUserId(profileid , token)
-        .then(data =>{
-            setPost([data])
+        .then(data0 =>{
+            setPost([data0])
+            setData({...data,intLoding : false})
         })
+        }, 2000);
     }
 
     const onClickMentions = () =>{
         setClickedMore(false)
         setHighlight('mentions')
+        setData({...data,intLoding : true})
+        setTimeout(() => {
         setPost([])
+        setData({...data,intLoding : false})
+        }, 2000);
     }
 
     const onClickSave = () =>{
         setClickedMore(false)
         setHighlight('saved')
-        savedPosts(profileid , token)
-        .then(data =>{
-            setPost([data.savedPost])
-        })
+        setData({...data,intLoding : true})
+        setTimeout(() => { 
+            savedPosts(profileid , token)
+            .then(data0 =>{
+                setPost([data0.savedPost])
+                setData({...data,intLoding : false})
+            })  
+        }, 2000);
     }
 
     const onClickMore = ( ) =>{
         setClickedMore(true)
         setHighlight('saved')
+        setData({...data,intLoding : true})
+        setTimeout(() => {
         setPost([])
+        setData({...data,intLoding : false})
+        }, 2000);
     }
 
    
@@ -160,7 +185,13 @@ function Profile(props) {
 
     let rednderData =''
 
-    if(!clickedMore){
+    if(intLoding){
+        rednderData =  <div class="progress" >
+        <div class="indeterminate"></div>
+      </div>
+    }
+    else{
+        if(!clickedMore){
         
         console.log(post)
         console.log(clickedMore)
@@ -182,19 +213,17 @@ function Profile(props) {
     else{
         rednderData = <Deatils data={data} />
     }
+}
     
     
     if(loading){
         return (
             <div>
-                <div class="progress">
+                <div class="progress" style={{marginTop:'55px'}}>
                 <div class="indeterminate"></div>
             </div>
             </div>
         )
-
-    
-
     }
     
     else{

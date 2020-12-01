@@ -11,6 +11,8 @@ function Search() {
 
     const [searchData, setSerchData] = useState('')
 
+    const [loading, setLoading] = useState(false)
+
     const { searchTerm } = search
 
 
@@ -22,26 +24,39 @@ function Search() {
     const onClear = () =>{
         setSearch({...search, searchTerm: ''})
         setSerchData('')
+        setLoading(false)
     } 
 
     
     const onSerch = (search) =>{
+        setLoading(true)
         if (search === '') {
-           return setSerchData('')
-        }
-        // lOding query place here
-        searchUser(search)
-            .then(data =>{
-            setSerchData(data)
-        })
+            setLoading(false)
+            return setSerchData('')
+         }
+         
+        setTimeout(() => {
+             // lOding query place here
+             searchUser(search)
+                 .then(data =>{
+                 setSerchData(data)
+                 setLoading(false)
+             })
+        }, 2000);
+        
     }  
-    
-
     let result = ''
     let noresult =''
+    let loder = ''
+    if(loading){
+        loder =  <div class="progress" >
+        <div class="indeterminate"></div>
+      </div>
+    }
     if (searchData === '') {
         result = ''
     }else{
+        
         if (searchData.msg == 'No search Found') {
             noresult = searchData.msg
         } else {
@@ -54,7 +69,7 @@ function Search() {
     <nav>
     <div class="nav-wrapper">
       <form autoComplete='off'>
-        <div class="input-field">
+        <div class="input-field black" style={{padding : '0px'}}>
           <input id="search" type="search" required onChange={handleChang('searchTerm')} value={searchTerm} />
           <label class="label-icon" for="search"><i class="material-icons">search</i></label>
           <i class="material-icons" onClick={() => onClear()} >close</i>
@@ -63,10 +78,10 @@ function Search() {
     </div>
   </nav>
   </div>
+  {loder}
     <h5 className='text-center notice mt-5'>{noresult}</h5>
        {result}
         </div>
     )
 }
-
 export default Search

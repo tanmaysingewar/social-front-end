@@ -19,14 +19,17 @@ function EditProfile() {
         verified : false,
         textColor: '',
         cardColor: '',
-        success : false
+        success : false,
+        loading : false
     })
 
     const [check, setCheck] = useState('')
 
-    const { joines ,joined , description   , name , email , username ,verified ,cardColor ,textColor ,success} = data
+    const { joines ,joined , description   , name , email , username ,verified ,cardColor ,textColor ,success,loading} = data
 
     useEffect(() => {
+      setData({...data,loading : true})
+      setTimeout(() => {
         getUserById( user._id , token)
         .then(data =>{
             setData({
@@ -38,9 +41,12 @@ function EditProfile() {
                 username : data.username ,
                 verified : true ,
                 textColor: data.color.textColor,
-                cardColor: data.color.cardColor
+                cardColor: data.color.cardColor,
+                loading : false
             })
         })
+      }, 2000);
+        
     }, [])
 
     const handleChange = (name)=> event =>{
@@ -82,18 +88,15 @@ function EditProfile() {
         usernameMessageWarn = `username is required`
     }
    
-    
-
-
-
-
     let isdisable = 'black'
 
     const onSubmit = () =>{
+      setData({...data,loading : true})
         if (!check.msg || check._id === user._id || check.msg === 'avaliable') {
             updateProfile(user._id, token , {name ,username , description ,email, color : { textColor , cardColor} })
             .then(datas =>{
               console.log(datas)
+              setData({...data,loading : false})
                 return setData({...data,success:true})
         })
         }
@@ -104,6 +107,13 @@ function EditProfile() {
        }
     }
 
+    if(loading){
+      return (
+        <div class="progress" style={{marginTop:'60px'}}>
+          <div class="indeterminate"></div>
+        </div>
+      )
+    }
   
 
     return (
@@ -164,7 +174,7 @@ function EditProfile() {
         {<div class="input-field inline">
         <input  type="color" class="validate" />
         </div>}
-        {/* TEmplate here */}
+        {/* Template here */}
             <div className='template-box'>
                 <div className='template' style={{background: 'linear-gradient(to right, #2980b9, #6dd5fa, #6dd5fa)'}}
                     onClick={()=> setData({...data,cardColor:'linear-gradient(to right, #2980b9, #6dd5fa, #6dd5fa)'})}

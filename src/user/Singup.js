@@ -1,9 +1,10 @@
 import React,{useState} from 'react'
 import { Redirect } from 'react-router-dom'
-import { checkUsername, singup , authincate} from '../auth/helper'
+import { checkUsername, singup , authincate, isAuthincated} from '../auth/helper'
 
 
 function Singup() {
+  const { user } = isAuthincated()
   const [values, setValues] = useState({
     name: '',
     email:'',
@@ -131,13 +132,13 @@ function Singup() {
   
 const performRedirection =()=>{
   if (success) {
-  return <Redirect to='/profile' />
+  return <Redirect to={'/profile/'+user._id} />
   }
 }
 
 const form =()=>{
  return(
-          <div className="row">
+          <div className="row" style={{marginTop:'45px'}}>
             <div className="col s12 m6">
                 <h2 className='text-center welcome-text'>Welcome!!</h2>
               <div className="card ">
@@ -148,7 +149,7 @@ const form =()=>{
                     <form className="col s12" autoComplete='off'>
                       <div className="row singin-form" >
                         <div className="input-field col s12">
-                          <input  id="first_name" type="text" className="validate" placeholder='Name' onChange={handleChange('name')} value={name} required/>
+                          <input id="first_name" type="text" className="validate" placeholder='Name' onChange={handleChange('name')} value={name} required/>
                           {/* Name is require represent only after if noting is in input field */}
                           <p className='warning'>{nameError}</p>
                         </div>
@@ -198,4 +199,3 @@ const form =()=>{
     )
 }
 export default Singup
-

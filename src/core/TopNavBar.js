@@ -1,5 +1,5 @@
 import React,{useState} from 'react'
-
+import { Link } from 'react-router-dom';
 function TopNavBar() {
     const [shownavbar, setshowNavbar] = useState(true)
 
@@ -22,11 +22,20 @@ function TopNavBar() {
         }else{
             displayNavBar = {top: '-60px'}
         }
+
     return (
         <div>
              <nav className='navbar' style={displayNavBar} >
-                    <div class="nav-wrapper " >
-                        </div>
+             <div class="nav-wrapper " >
+                 <div style={{alignContent : 'flex-start',fontSize: '25px',paddingLeft : '10px'}}>
+                    {/* <span class="material-icons">
+                        keyboard_backspace
+                    </span> */}
+                     <Link to='/' style={{float : 'right'}} ><i  class="large material-icons " style={{fontSize: '25px',paddingRight : '10px'}}>settings</i></Link>
+                    <Link className='logo-name' to='/' >Ficktree</Link>
+                   
+                 </div>    
+                    </div>
                 </nav>
         </div>
     )

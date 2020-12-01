@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Redirect } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import { authincate, singin  } from '../auth/helper'
 
 function Singin() {
@@ -98,7 +98,7 @@ function Singin() {
 
     return (
         <div>
-          <div class="row">
+          <div class="row" style={{marginTop:'45px'}}>
             <div class="col s12 m6">
                   <h2 className='text-center welcome-text'>Welcome!!</h2>
               <div class="card ">
@@ -124,7 +124,7 @@ function Singin() {
                       <div class="row singin-form">
                         <div class="input-field col s12 text-center">
                         <button class="btn waves-effect waves-light" type="submit" name="action" onClick={onSubmit}>Submit </button><br/><br/>
-                        <p>Dont have accoutn ? Singin</p>
+                        <p>Dont have accoutn ? <Link to='/singup' >Signup</Link></p>
                         </div>
                       </div>
                     </form>

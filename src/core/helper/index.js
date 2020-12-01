@@ -62,3 +62,19 @@ export const ondeletePost = (postId , userId , token) =>{
     })
     .catch(err => console.log(err))
 }
+
+
+export const getAllComments = (postId , token) =>{
+    return fetch(`${API}/post/all/comments/${postId}`,{
+        method: "POST",
+        headers:{
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization : `Bearer ${token}`
+        }
+    })
+    .then(res =>{
+        return res.json()
+    })
+    .catch(err => console.log(err))
+}

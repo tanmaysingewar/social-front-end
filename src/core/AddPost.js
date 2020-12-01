@@ -11,10 +11,11 @@ function AddPost() {
         post: '',
         textColor : 'black',
         cardColor: 'white',
-        success: false
+        success: false,
+        loading : false
     })
 
-    const{title,post,textColor,cardColor,success} = values
+    const{title,post,textColor,cardColor,success,loading} = values
 
     const handleChange = (name)=> event =>{
         setValues({...values,[name]:event.target.value})
@@ -25,21 +26,32 @@ function AddPost() {
     }
 
     const onSubmit = () =>{
-        if(!post){
-            return ''
-        }
-        //loding
-        createPost({postTitle : title,post,color:{textColor, cardColor}},token,user._id)
-        .then(data =>{
-             //loding close
-        setValues({...values,success : true})
-        })
+        setValues({...values,loading : true})
+        setTimeout(() => {
+            if(!post){
+                return ''
+            }
+            //loding
+            createPost({postTitle : title,post,color:{textColor, cardColor}},token,user._id)
+            .then(data =>{
+                 //loding close
+            setValues({...values,success : true})
+            setValues({...values,loading : false})
+            }) 
+        }, 2000);
+        
     }
 
     const performRedirect = ()=>{
         if (success) {
           return <Redirect to={'/profile/'+ user._id} />
         }
+    }
+
+    if(loading){
+        return  <div class="progress" style={{marginTop:'60px'}}>
+        <div class="indeterminate"></div>
+      </div>
     }
 
     return (

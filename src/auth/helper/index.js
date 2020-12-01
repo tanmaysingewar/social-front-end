@@ -106,9 +106,9 @@ export const searchUser =(serchTerm)=>{
     .catch(err => console.log(err))
 }
 
-export const getAllPost = (token)=>{
-    return fetch(`${API}/post/all`,{
-        method : 'POST',
+export const getAllPost = (token, skip, limit )=>{
+    return fetch(`${API}/post?limit=${limit}&skip=${skip}`,{
+        method : 'GET',
         headers:{
             Accept: 'application/json',
             'Content-Type' : 'application/json',

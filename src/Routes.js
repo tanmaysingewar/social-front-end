@@ -9,20 +9,23 @@ import Profile from './user/Profile'
 import Search from './user/Search'
 import Singin from './user/Singin'
 import Singup from './user/Singup'
-
+import './materialize.min.css'
+import PrivateRoutes from './privateRoutes'
+import Comment from './core/coments'
 
 function Routes() {
     return (
         <BrowserRouter>
             <Switch>
-                    <Route path='/' exact component={Home} />
                     <Route path='/singin' exact component={Singin} />
                     <Route path='/singup' exact component={Singup} />
-                    <Route path='/profile/:value' exact component={Profile} />
-                    <Route path='/search' exact component={Search} />
-                    <Route path='/post' exact component={AddPost} />
-                    <Route path='/add/post' exact component={AddPost} />
-                    <Route path='/edit/profile' exact component={EditProfile} />
+                    <PrivateRoutes path='/' exact component={Home} />
+                    <PrivateRoutes path='/profile/:value' exact component={Profile} />
+                    <PrivateRoutes path='/search' exact component={Search} />
+                    <PrivateRoutes path='/post' exact component={AddPost} />
+                    <PrivateRoutes path='/add/post' exact component={AddPost} />
+                    <PrivateRoutes path='/edit/profile' exact component={EditProfile} />
+                    <PrivateRoutes path='/post/allcomments/:value' exact component={Comment} />
             </Switch>
             <BottomNav />
             <TopNavBar />

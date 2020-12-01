@@ -63,7 +63,7 @@ function ProfileCard({data ,update}) {
     
 
     return (
-        <div style={{marginTop:'50px'}}>
+        <div style={{marginTop:'55px'}}>
            <div class="card " style={{background : cardColor }}>
                         <div class="card-content " style={{color : textColor}}>
                             <table>

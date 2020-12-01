@@ -1,10 +1,12 @@
 import React,{useState,useEffect} from 'react'
+import { Link } from 'react-router-dom'
 import { isAuthincated} from '../auth/helper'
 import { commentPost, islikedPost, likePost } from '../user/helper'
 import { isPostSaved, savePost , ondeletePost} from './helper'
 import Bookmark from './svg/Bookmark'
 import VerifiedSvg from './svg/Verified'
-function Card({index , cardData}) {
+
+function Card({index , cardData, showComment = false}) {
 
   const {user, token } = isAuthincated()
 
@@ -75,6 +77,9 @@ function Card({index , cardData}) {
   if(cardData.comments.count === 1){
     commentData =  `See comments`
     }
+  if(showComment){
+    commentData = `Add comments`
+  }
 
 
   const onComment =(event)=>{
@@ -106,6 +111,30 @@ function Card({index , cardData}) {
     .then(date =>{
       setDeletePost('deleted')
     })
+  }
+
+  const commentSection = () =>{
+      let displayComment = ''
+      if(showComment){
+        displayComment = cardData.comments.comment.map((comments)=>{
+          return <div style={{marginBottom : '10px'}}>
+                   <b style={{padding: '0px'}}>@{comments.username.username}</b><br/>
+                   <span style={{marginLeft : '15px'}}>{comments.commentText}</span>
+               </div>
+       })
+      }
+
+      return <div class="col s11 ">
+      {/***Add link to the see all comment page  */}
+          <span style={{fontSize : '13px'}}><Link to={"/post/allcomments/"+ cardData._id} style={{color : 'black'}}>{commentData}</Link></span>
+            <div className='input-field commentSection'>
+              <input className="commentitextarea" data-length="100" placeholder='Comment' onChange={handleChange('comment')} value={comment} autoComplete='off' />
+                <i class="material-icons prefix" onClick={onComment}  style={{fontSize : '23px',marginTop : '1px',marginLeft : '5px'}}>send</i>
+               {displayComment}
+            </div>
+            
+    </div>
+    
   }
 
   let date = new Date(cardData.createdAt);
@@ -149,14 +178,8 @@ function Card({index , cardData}) {
                           <td><spam>{cardData.likes.count}</spam></td>
                     <td style={{float : 'right', paddingRight: '10px'}} onClick={() => setDeletePost(true)}>{deleteButton}</td>
                     </table>
-                  <div class="col s11 ">
-                    {/***Add link to the see all comment page  */}
-                        <span style={{fontSize : '13px'}}>{commentData}</span>
-                          <div className='input-field commentSection'>
-                            <input className="commentitextarea" data-length="100" placeholder='Comment' onChange={handleChange('comment')} value={comment} autoComplete='off' />
-                              <i class="material-icons prefix" onClick={onComment}  style={{fontSize : '28px',top : '0'}}>send</i>
-                          </div>
-                  </div>
+                    {commentSection()}
+                  
                 </div>
               </div>
             }
