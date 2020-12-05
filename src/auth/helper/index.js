@@ -82,8 +82,8 @@ export const getUserById = (userId, token) =>{
 .catch(err => console.log(err))
 }
 
-export const getPostByUserId = (userId, token)=>{
-    return fetch(`${API}/post/allpost/${userId}`,{
+export const getPostByUserId = (userId, token,skip ,limit)=>{
+    return fetch(`${API}/post/allpost/${userId}?limit=${limit}&skip=${skip}`,{
         method : 'POST',
         headers:{
             Accept: 'application/json',
@@ -107,8 +107,8 @@ export const searchUser =(serchTerm)=>{
 }
 
 export const getAllPost = (token, skip, limit )=>{
-    return fetch(`${API}/post?limit=${limit}&skip=${skip}`,{
-        method : 'GET',
+    return fetch(`${API}/post/all?limit=${limit}&skip=${skip}`,{
+        method : 'POST',
         headers:{
             Accept: 'application/json',
             'Content-Type' : 'application/json',

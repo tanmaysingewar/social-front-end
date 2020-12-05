@@ -73,8 +73,8 @@ export const PostCounts = (UserId , token)=>{
 })
 .catch(err => console.log(err))}
 
-export const savedPosts = (UserId , token) =>{
-    return fetch(`${API}/post/saved/${UserId}`,{
+export const savedPosts = (UserId , token, skip,limit) =>{
+    return fetch(`${API}/post/saved/${UserId}?limit=${limit}&skip=${skip}`,{
         method : 'Post',
         headers:{
             Accept: 'application/json',
