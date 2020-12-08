@@ -78,3 +78,14 @@ export const getAllComments = (postId , token) =>{
     })
     .catch(err => console.log(err))
 }
+
+
+export const getColors = () =>{
+    return fetch(`${API}/card/color`,{
+        method: "GET"
+    })
+    .then(res =>{
+        return res.json()
+    })
+    .catch(err => console.log(err))
+}

@@ -4,7 +4,6 @@ import SerchReasult from '../core/SerchReasult'
 
 
 function Search() {
-
     const [search, setSearch] = useState({
         searchTerm : ''
     })
@@ -15,12 +14,10 @@ function Search() {
 
     const { searchTerm } = search
 
-
     const handleChang = (name) => event =>{
         setSearch({...search, [name]: event.target.value})
         onSerch(event.target.value)
     }
-   
     const onClear = () =>{
         setSearch({...search, searchTerm: ''})
         setSerchData('')
@@ -50,8 +47,8 @@ function Search() {
     let loder = ''
     if(loading){
         loder =  <div class="progress" >
-        <div class="indeterminate"></div>
-      </div>
+                    <div class="indeterminate"></div>
+                </div>
     }
     if (searchData === '') {
         result = ''
@@ -64,23 +61,23 @@ function Search() {
         }
     }
     return (
-    <div className='card-content' style={{marginTop : '45px'}} >
-        <div style={{padding : '10px'}}>
-    <nav>
-    <div class="nav-wrapper">
-      <form autoComplete='off'>
-        <div class="input-field black" style={{padding : '0px'}}>
-          <input id="search" type="search" required onChange={handleChang('searchTerm')} value={searchTerm} />
-          <label class="label-icon" for="search"><i class="material-icons">search</i></label>
-          <i class="material-icons" onClick={() => onClear()} >close</i>
-        </div>
-      </form>
-    </div>
-  </nav>
-  </div>
-  {loder}
-    <h5 className='text-center notice mt-5'>{noresult}</h5>
-       {result}
+        <div className='card-content' style={{marginTop : '45px'}} >
+            <div style={{padding : '10px'}}>
+                <nav>
+                    <div class="nav-wrapper">
+                        <form autoComplete='off'>
+                            <div class="input-field black" style={{padding : '0px'}}>
+                                <input id="search" type="search" required onChange={handleChang('searchTerm')} value={searchTerm} />
+                                <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+                                <i class="material-icons" onClick={() => onClear()} >close</i>
+                            </div>
+                        </form>
+                    </div>
+                </nav>
+            </div>
+            {loder}
+            <h5 className='text-center notice mt-5'>{noresult}</h5>
+            {result}
         </div>
     )
 }

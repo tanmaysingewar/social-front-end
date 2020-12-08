@@ -188,10 +188,9 @@ const form =()=>{
               </div>
             </div>
           </div>
-  )
-}
-
-    return (
+        )
+      }
+return (
         <div>
             {form()}
             {performRedirection()}

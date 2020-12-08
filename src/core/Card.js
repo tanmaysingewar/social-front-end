@@ -7,9 +7,8 @@ import Bookmark from './svg/Bookmark'
 import VerifiedSvg from './svg/Verified'
 
 function Card({index , cardData, showComment = false}) {
-
+  
   const {user, token } = isAuthincated()
-
   const [like, setLike] = useState('')
   const [save, setSave] = useState('')
   const [comments, setComment] = useState({

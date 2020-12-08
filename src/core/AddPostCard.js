@@ -1,14 +1,14 @@
 import React from 'react'
 
 function AddPostCard({values, username}) {
-    const{title,post,textColor,cardColor,success} = values
+    const{title,post,textColor,cardColor} = values
 
     return (
         <div>
-            <div class="row">
+            <div class="row" style={{marginTop : '40px'}} >
                 <div class="col s12 m6">
                     <h5 className='text-center'>Create Post</h5>
-                    <div class="card " style={{background : cardColor}} >
+                    <div class="card " style={{background : cardColor }} >
                         <div class="card-content " >
                             <div className='input-field'>
                                 <table border='2px solid'>

@@ -337,13 +337,8 @@ function Profile(props) {
                                 </tr>
                             </table>
                 </div>
-                {/* <div class="progress">
-                <div class="indeterminate"></div>
-            </div> */}
                 {/*** Print posts here */}
-                {
-                   rednderData
-                }
+                {rednderData}
                 {displayBotomLoding}
                 {/***create post buttton */}
                 <div class="fixed-action-btn">

@@ -1,7 +1,7 @@
 import React,{useState,useEffect} from 'react'
 import { Redirect } from 'react-router-dom'
 import { checkUsername, getUserById, isAuthincated } from '../auth/helper'
-import cardTemplate from './cardTemplate'
+import { getColors } from '../core/helper'
 import { updateProfile } from './helper'
 import ProfileCard from './ProfileCard'
 
@@ -25,6 +25,10 @@ function EditProfile() {
 
     const [check, setCheck] = useState('')
 
+    const [colors, setColors] = useState([])
+
+    const TextColors = ['white','black','red','green'] 
+
     const { joines ,joined , description   , name , email , username ,verified ,cardColor ,textColor ,success,loading} = data
 
     useEffect(() => {
@@ -44,6 +48,10 @@ function EditProfile() {
                 cardColor: data.color.cardColor,
                 loading : false
             })
+        })
+        getColors()
+        .then(data =>{
+          setColors(data)
         })
       }, 2000);
         
@@ -157,16 +165,13 @@ function EditProfile() {
             <input  type="color" class="validate"  />
         </div>
         <div className='template-box-text'>
-        <div className='template-text' style={{background: 'white',border: '0.5px solid grey'}}
-            onClick={()=> setData({...data,textColor:'white'})}
-        ></div>
-        <div className='template-text' style={{background: 'black'}}
-             onClick={()=> setData({...data,textColor:''})}
-        ></div>
-        <div className='template-text' style={{background: 'red'}}
-        ></div>
-        <div className='template-text' style={{background: 'green'}}
-        ></div>
+          {
+            TextColors.map(color =>{
+              return <div className='template-text' style={{background: color,border: '0.5px solid grey'}}
+              onClick={()=> setData({...data,textColor: color})}
+          ></div>
+            })
+          }
         </div>
         </div>
         <div class="col s12">
@@ -175,62 +180,12 @@ function EditProfile() {
         <input  type="color" class="validate" />
         </div>}
         {/* Template here */}
-            <div className='template-box'>
-                <div className='template' style={{background: 'linear-gradient(to right, #2980b9, #6dd5fa, #6dd5fa)'}}
-                    onClick={()=> setData({...data,cardColor:'linear-gradient(to right, #2980b9, #6dd5fa, #6dd5fa)'})}
+        <div className='template-box'>
+                {colors.map(color => {
+                   return <div className='template' style={{background: color}}
+                    onClick={()=> setData({...data,cardColor: color})}
                 ></div>
-                <div className='template' style={{background: 'linear-gradient(to right, #ff0099, #493240)'}}
-                    onClick={()=> setData({...data,cardColor:'linear-gradient(to right, #ff0099, #493240)'})}
-                ></div>
-                <div className='template' style={{background: 'linear-gradient(to right, #1f4037, #99f2c8)'}}
-                onClick={()=> setData({...data,cardColor:'linear-gradient(to right, #1f4037, #99f2c8)'})}
-                ></div>
-                <div className='template' style={{background: 'linear-gradient(to right, #f953c6, #b91d73)'}}
-                onClick={()=> setData({...data,cardColor:'linear-gradient(to right, #f953c6, #b91d73)'})}
-                ></div>
-                <div className='template' style={{background: 'linear-gradient(to right, #7f7fd5, #86a8e7, #91eae4)'}}
-                onClick={()=> setData({...data,cardColor:'linear-gradient(to right, #7f7fd5, #86a8e7, #91eae4)'})}
-                ></div>
-                <div className='template' style={{background: 'linear-gradient(to right, #8360c3, #2ebf91)'}}
-                onClick={()=> setData({...data,cardColor:'linear-gradient(to right, #8360c3, #2ebf91)'})}
-                ></div>
-                <div className='template' style={{background: 'linear-gradient(to right, #009fff, #ec2f4b)'}}
-                onClick={()=> setData({...data,cardColor:'linear-gradient(to right, #009fff, #ec2f4b)'})}
-                ></div>
-                <div className='template' style={{background: 'linear-gradient(to right, #348f50, #56b4d3)'}}
-                onClick={()=> setData({...data,cardColor:'linear-gradient(to right, #348f50, #56b4d3)'})}
-                ></div>
-                <div className='template' style={{background: 'linear-gradient(to right, #654ea3, #eaafc8)'}}
-                onClick={()=> setData({...data,cardColor:'linear-gradient(to right, #654ea3, #eaafc8)'})}
-                ></div>
-                <div className='template' style={{background: 'linear-gradient(to right, #a8ff78, #78ffd6)'}}
-                onClick={()=> setData({...data,cardColor:'linear-gradient(to right, #a8ff78, #78ffd6)'})}
-                ></div>
-                <div className='template' style={{background: 'linear-gradient(to right, #fdc830, #f37335)'}}
-                onClick={()=> setData({...data,cardColor:'linear-gradient(to right, #fdc830, #f37335)'})}
-                ></div>
-                <div className='template' style={{background: 'linear-gradient(to right, #ad5389, #3c1053)'}}
-                onClick={()=> setData({...data,cardColor:'linear-gradient(to right, #ad5389, #3c1053)'})}
-                ></div>
-                <div className='template' style={{background: 'linear-gradient(to right, #da22ff, #9733ee)'}}
-                onClick={()=> setData({...data,cardColor:'linear-gradient(to right, #da22ff, #9733ee)'})}
-                ></div>
-                <div className='template' style={{background: 'linear-gradient(to right, #02aab0, #00cdac)'}}
-                onClick={()=> setData({...data,cardColor:'linear-gradient(to right, #02aab0, #00cdac)'})}
-                ></div>
-                <div className='template' style={{background: 'linear-gradient(to right, #00b09b, #96c93d)'}}
-                onClick={()=> setData({...data,cardColor:'linear-gradient(to right, #00b09b, #96c93d)'})}
-                ></div>
-                <div className='template' style={{background: 'linear-gradient(to right, #fc4a1a, #f7b733)'}}
-                onClick={()=> setData({...data,cardColor:'linear-gradient(to right, #fc4a1a, #f7b733)'})}
-                ></div>
-                <div className='template' style={{background: 'linear-gradient(to right, #007991, #78ffd6)'}}
-                onClick={()=> setData({...data,cardColor:'linear-gradient(to right, #007991, #78ffd6)'})}
-                ></div>
-                <div className='template' style={{background: 'linear-gradient(to right, #eb5757, #000000)'}}
-                onClick={()=> setData({...data,cardColor:'linear-gradient(to right, #eb5757, #000000)'})}
-                ></div>
-                
+                })}
                 </div>
         </div>
     </div>

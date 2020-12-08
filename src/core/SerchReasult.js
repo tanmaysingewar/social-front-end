@@ -4,8 +4,6 @@ import Profile from '../user/Profile'
 import VerifiedSvg from './svg/Verified'
 
 function SerchReasult({data}) {
-
-  console.log(data._id)
     return (
         <Link to={'/profile/'+data._id}  >
               <div class="card bm0 p2 m5"  >

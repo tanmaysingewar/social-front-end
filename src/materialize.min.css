@@ -2002,7 +2002,7 @@ video.responsive-video {
 .breadcrumb i.material-icons {
   display: inline-block;
   float: left;
-  font-size: 24px;
+  font-size: 20px;
 }
 .breadcrumb:before {
   content: "\E5CC";
