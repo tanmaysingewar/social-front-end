@@ -114,3 +114,18 @@ export const JoinUser = (UserId , token) =>{
     return res.json()
 })
 .catch(err => console.log(err))}
+
+
+export const TopUsers = ( token) =>{
+    return fetch(`${API}/user/top/users`,{
+        method : 'Post',
+        headers:{
+            Accept: 'application/json',
+            'Content-Type' : 'application/json',
+            Authorization : `Bearer ${token}`
+        }
+    })
+.then(res =>{
+    return res.json()
+})
+.catch(err => console.log(err))}

@@ -27,15 +27,27 @@ function EditProfile() {
 
     const [colors, setColors] = useState([])
 
+    const [disableButton, setdisableButton] = useState(false)
+
+    const [warningMsg, setWarningMsg] = useState({
+      name : '',
+      description : ''
+    })
+
     const TextColors = ['white','black','red','green'] 
 
-    const { joines ,joined , description   , name , email , username ,verified ,cardColor ,textColor ,success,loading} = data
+    const {  description   , name , email , username  ,cardColor ,textColor ,success,loading} = data
 
     useEffect(() => {
       setData({...data,loading : true})
-      setTimeout(() => {
         getUserById( user._id , token)
         .then(data =>{
+          if(!data){
+            return setData([])
+          }
+          if(data.error){
+            return setData([])
+          }
             setData({
                 joines : data.joines.count,
                 joined : data.joined.count,
@@ -43,7 +55,7 @@ function EditProfile() {
                 name : data.name,
                 email : data.email,
                 username : data.username ,
-                verified : true ,
+                verified : data.verified ,
                 textColor: data.color.textColor,
                 cardColor: data.color.cardColor,
                 loading : false
@@ -51,27 +63,71 @@ function EditProfile() {
         })
         getColors()
         .then(data =>{
+          if(!data){
+            return setColors([])
+          }
           setColors(data)
-        })
-      }, 2000);
-        
+        })// eslint-disable-next-line 
     }, [])
 
-    const handleChange = (name)=> event =>{
-        setData({...data,[name]: event.target.value})
-        if ([name]=='username') {
-            trigureUsername(event.target.value)
+
+    
+
+    const handleChange = (namez)=> event =>{
+
+      if(namez == 'username'){
+        let nsusername =event.target.value.replace(/ /g,"")
+        if(nsusername.length > 20){
+          setdisableButton(true)
+          setCheck('countu')
+          return setData({...data,[namez]: username})
         }
+        setdisableButton(false)
+        setData({...data,[namez]: nsusername})// eslint-disable-next-line 
+        if ([namez]=='username') {
+            trigureUsername(nsusername)
+        }
+      }
+      if(namez == 'name'){
+        if(event.target.value.length > 30){
+          setdisableButton(true)
+          setWarningMsg({...warningMsg , name : 'Name is too long'})
+          return setData({...data,[namez]: name})
+        }
+        setData({...data,[namez]: event.target.value })
+        setWarningMsg({...warningMsg , name : ''})
+        setdisableButton(false)
+      }
+
+      if(namez == 'description'){
+        if(event.target.value.length > 90){
+          setdisableButton(true)
+          setWarningMsg({...warningMsg , description : 'Description is too long'})
+          return setData({...data,[namez]: description})
+        }
+        setData({...data,[namez]: event.target.value })
+        setWarningMsg({...warningMsg , description : ''})
+        setdisableButton(false)
+      }
+      
+        
     }
 
     const trigureUsername = (username) =>{
-        let nsusername =username.replace(/ /g,"")
-        if (nsusername.length === 0) {
+        if (username.length === 0) {
+          setdisableButton(true)
           setCheck('empty')
-        }else{
+        }
+        else if(username.length > 19){
+          setCheck('countu')
+        }
+        else{
           checkUsername({username})
         .then(data =>{
-          if (data.error) {
+          if(!data){
+            return setCheck('')
+          }
+          if(data.error) {
             setCheck(data.error)
           }else{
             setCheck(data)
@@ -79,15 +135,18 @@ function EditProfile() {
         })
         }
     }
+ 
+
 
     let usernameMessage = ''
     let usernameMessageWarn = ''
+    
 
     if(check){
-        usernameMessageWarn = `${username} is already taken`
+      usernameMessageWarn = `${username} is already taken`
     }
     if (check._id === user._id) {
-        usernameMessageWarn = `${check.msg} is old username`
+        usernameMessageWarn = `${check.msg} is your old username`
     }
     if(check.msg === 'avaliable'){
         usernameMessage = 'This username is avalable'
@@ -95,16 +154,25 @@ function EditProfile() {
     }if (username === '') {
         usernameMessageWarn = `username is required`
     }
+    if(check === 'countu'){
+      usernameMessageWarn = `username is too long`
+    }
+    
+
+
    
-    let isdisable = 'black'
 
     const onSubmit = () =>{
+      setdisableButton(true)
       setData({...data,loading : true})
+      if(check === 'count' || warningMsg.name || warningMsg.description){
+        return  setData({...data,loading : false})
+      }
         if (!check.msg || check._id === user._id || check.msg === 'avaliable') {
             updateProfile(user._id, token , {name ,username , description ,email, color : { textColor , cardColor} })
-            .then(datas =>{
-              console.log(datas)
+            .then(res =>{
               setData({...data,loading : false})
+              setdisableButton(false)
                 return setData({...data,success:true})
         })
         }
@@ -130,7 +198,7 @@ function EditProfile() {
             <div class="col s12 m6">
             <ProfileCard data={data} update={true} />
             <div className='text-center' >
-                    <a  class="btn" style={{backgroundColor: isdisable}} onClick={onSubmit}>Update</a>
+                    <button  class="btn" disabled={disableButton} style={{backgroundColor: 'black'}} onClick={onSubmit}>Update</button>
                     <p className='notice'>Click here to update</p>
                 </div>
                     <div class="card ">
@@ -148,11 +216,13 @@ function EditProfile() {
       <div class="row">
         <div class="input-field col s12">
           <input type="text" class="validate" onChange={handleChange('name')} value={name} placeholder='Full Name' />
+          <span className='warning'>{warningMsg.name}</span>
         </div>
       </div>
       <div class="row">
         <div class="input-field col s12">
           <textarea  type="email" class="materialize-textarea" onChange={handleChange('description')} value={description}  placeholder='Textarea' style={{height:'70px'}} />
+          <span className='warning'>{warningMsg.description}</span>
         </div>
       </div>
     </form>
@@ -182,7 +252,7 @@ function EditProfile() {
         {/* Template here */}
         <div className='template-box'>
                 {colors.map(color => {
-                   return <div className='template' style={{background: color}}
+                   return <div className='template' style={{background: color,border : '1px solid #dadce0'}}
                     onClick={()=> setData({...data,cardColor: color})}
                 ></div>
                 })}

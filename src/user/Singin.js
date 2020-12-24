@@ -8,34 +8,42 @@ function Singin() {
     password: '',
     success : false,
     error:'',
-    param: '',
-    params : {
-      email : '',
-      password : ''
-    }
+    param: ''
   })
 
-  const { email, password , success  ,param ,params} = values
+  const [intLoading, setintLoading] = useState(false)
+
+  const [disableButton, setdisableButton] = useState(false)
+
+  const { email, password , success  ,param } = values
 
 
   let mainMessage = ''
   let emailMessage = ''
   let passwordlMessage = ''
 
-  if (param) {
-    mainMessage = '*Email and password dosent match param*'
-  }
-  if (param === 'email'){
-    emailMessage= '*Email is require*'
-  }
-  if (param === 'password'){
-    passwordlMessage = '*Password is required*'
-  }
-  if (params.email === 'emptyinputs-email') {
-    emailMessage= 'Email is require'
-  }
-  if (params.password === 'emptyinputs-password') {
-    passwordlMessage = '*Password is required*'
+  if(param){
+    if(email === '' || param === 'email'){
+      emailMessage = 'Email is required'
+    }
+    if(password === '') {
+      passwordlMessage = 'Password is required'
+    }
+    if(param === 'noUser') {
+      mainMessage = 'Email and password dosent match'
+    }
+    if(param === 'password'){
+      passwordlMessage = 'Password should be at least 6 lettes long'
+    }
+    if(param === 'USER email Does not exist'){
+      mainMessage = <span>No Account found please <Link to='/singup'>Signup</Link></span>
+    }
+    if(param === 'Email and password dosent match'){
+      mainMessage = param
+    }
+    if(param === 'sm'){
+      mainMessage = 'Something went wrong '
+    }
   }
 
   const handleChange = (name) => event =>{
@@ -44,15 +52,20 @@ function Singin() {
 
   const onSubmit = (event) =>{
     event.preventDefault()
+    setintLoading(true)
+    setdisableButton(true)
     if (email && password) {
       singin({email , password})
     .then(data =>{
+      if(!data){
+        return setValues({...values,param: 'sm'})
+      }
       if (data.error) {
           setValues({...values,param: data.error})
       }
       else{
         if (!data) {
-          setValues({...values, param:'finalCheck'})
+          setValues({...values, param:'noUser'})
         }else{
           authincate(data,()=>{
             //Redirection will be there afteward
@@ -67,34 +80,30 @@ function Singin() {
             })
         }
       }
+      setintLoading(false)
+      setdisableButton(false)
     })
     }else{
-      
-      }if(password === ''){
-        setValues({...values,params:{
-          password : 'emptyinputs-password'
-        }})
+      if(email ==='' || password === ''){
+        setintLoading(false)
+        setdisableButton(false)
+        setValues({...values, param:'Check'})
       }
-      if(email === ''){
-        setValues({...values,params:{
-          email : 'emptyinputs-email'
-        }})
-      }
-      if (email === '' && password === '') {
-        setValues({...values,params:{
-          email : 'emptyinputs-email',
-          password : 'emptyinputs-password'
-        }})
-      
     }
 }
 
   const performRedirect = ()=>{
       if (success) {
-        return <Redirect to='/profile' />
+        return <Redirect to='/profile/me' />
       }
   }
 
+  let rednderData = ''
+  if(intLoading){
+    rednderData =  <div class="progress">
+    <div class="indeterminate"></div>
+  </div>
+  }
 
     return (
         <div>
@@ -103,6 +112,7 @@ function Singin() {
                   <h2 className='text-center welcome-text'>Welcome!!</h2>
               <div class="card ">
                 <div class="card-content ">
+                  {rednderData}
                   <h3 className='text-center'>Sing In</h3>
                       <p className='warning text-center'>{mainMessage}</p>
                   <div class="row">
@@ -123,7 +133,7 @@ function Singin() {
                       </div>
                       <div class="row singin-form">
                         <div class="input-field col s12 text-center">
-                        <button class="btn waves-effect waves-light" type="submit" name="action" onClick={onSubmit}>Submit </button><br/><br/>
+                        <button class="btn waves-effect waves-light" disabled={disableButton} type="submit" name="action" onClick={onSubmit}>Submit </button><br/><br/>
                         <p>Dont have accoutn ? <Link to='/singup' >Signup</Link></p>
                         </div>
                       </div>

@@ -10,11 +10,21 @@ function AddPost() {
 
     const [colors, setColors] = useState([])
 
+    const [warningMsg, setWarningMsg] = useState({
+        title : '',
+        post : ''
+    })
+
+    const [disableButton, setDisableButton] = useState(false)
+
     const TextColor = ['black','white','red','green']
 
     useEffect(() => {
         getColors()
         .then(data =>{
+            if(!data){
+                return setColors([])
+            }
             setColors(data)
         }) 
     }, [])
@@ -31,33 +41,57 @@ function AddPost() {
     const{title,post,textColor,cardColor,success,loading} = values
 
     const handleChange = (name)=> event =>{
+        if(name == 'title'){
+            if(event.target.value.length > 25){
+                setDisableButton(true)
+                setWarningMsg({... warningMsg, title : 'title is too long'})
+                return setValues({...values,[name]: title})
+            }
+            setWarningMsg({... warningMsg, title : ''})
+        }
+        if(name == 'post'){
+            
+            if(event.target.value.length > 1000){
+                setDisableButton(true)
+                setWarningMsg({... warningMsg, post : 'post is too long'})
+                return setValues({...values,[name]: post})
+            }
+            setWarningMsg({... warningMsg, post : ''})
+            if(event.target.value.length === 0) setWarningMsg({... warningMsg, post : 'post is required'})
+        }
+        setDisableButton(false)
         setValues({...values,[name]:event.target.value})
     }
-    let isdisable = 'black'
-    if(post === ''){
-         isdisable = '#cecece'
-    }
+    
 
     const onSubmit = () =>{
+        setDisableButton(true)
         setValues({...values,loading : true})
-        setTimeout(() => {
-            if(!post){
-                return ''
+            if(!post  || warningMsg.title || warningMsg.post === 'post is too long'){
+                setValues({...values,loading : false})
+                setWarningMsg({... warningMsg, post : 'post is required'})
+                return setValues({...values,success : false})
             }
             //loding
             createPost({postTitle : title,post,color:{textColor, cardColor}},token,user._id)
             .then(data =>{
                  //loding close
-            setValues({...values,success : true})
-            setValues({...values,loading : false})
+                 if(data){
+                    setValues({...values,success : true})
+                 }
+                 if(data.error){
+                    setValues({...values,loading : false})
+                   return setValues({...values,success : false})
+                 }
+                 setDisableButton(false)
+                 setValues({...values,loading : false})
             }) 
-        }, 2000);
         
     }
 
     const performRedirect = ()=>{
         if (success) {
-          return <Redirect to={'/profile/'+ user._id} />
+          return <Redirect to={'/profile/me'} />
         }
     }
 
@@ -72,7 +106,7 @@ function AddPost() {
             <AddPostCard values={values} username={user.username} />
             <div class="row">
                 <div className='text-center' >
-                    <a  class="btn" style={{backgroundColor: isdisable}} onClick={onSubmit}>Post</a>
+                    <button  class="btn black" disabled={disableButton}  onClick={onSubmit}>Post</button>
                     <p className='notice'>Click here to post</p>
                 </div>
                 <div class="col s12 m6">
@@ -84,12 +118,13 @@ function AddPost() {
                                 <div class="row">
                                     <div class="input-field col s12">
                                         <input   id="disabled" type="text" class="validate" placeholder='Title' onChange={handleChange('title')} value={title} autoComplete='off'/>
-                                        <p className='warning'>*title is totally optional*</p>
+                                        <p className='warning'>{warningMsg.title}</p>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="input-field col s12">
-                                        <textarea  type="text" class="materialize-textarea" placeholder='Post' onChange={handleChange('post')} value={post} ></textarea>
+                                        <textarea  type="text" class="materialize-textarea" placeholder='Post' onChange={handleChange('post')} style={{height:'100px'}} value={post} ></textarea>
+                                        <p className='warning'>{warningMsg.post}</p>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -117,7 +152,7 @@ function AddPost() {
                                 </div>
                                 <div className='template-box'>
                                     {colors.map(color => {
-                                    return <div className='template' style={{background: color}}
+                                    return <div className='template' style={{background: color,border : '1px solid #dadce0'}}
                                         onClick={()=> setValues({...values,cardColor: color})}
                                     ></div>
                                     })}
@@ -130,7 +165,6 @@ function AddPost() {
         </div>
         {performRedirect()}
         </div>
-
     )
 }
 

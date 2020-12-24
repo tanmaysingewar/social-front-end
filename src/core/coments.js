@@ -5,19 +5,39 @@ import { getAllComments } from './helper'
 
 
 function Coments(props) {
-    const { user , token} = isAuthincated()
+    const { token } = isAuthincated()
     const [data, setData] = useState('')
+    const [loading, setLoading] = useState(false)
+
     useEffect(() => {
-        getAllComments(props.match.params.value, token)
+        setLoading(true)
+        setTimeout(() => {
+            getAllComments(props.match.params.value, token)
         .then(data =>{
-            console.log(data)
+            if(!data){
+                return setData('')
+            }
+            if(data.error){
+                return setData('')
+            }
             setData(data.post)
-        })
+            setLoading(false)
+        })// eslint-disable-next-line 
+        }, 2000);
+        
     }, [])
 
+    if(loading){
+        return  <div>
+          <div class="progress" style={{marginTop:'55px'}}>
+          <div class="indeterminate"></div>
+      </div>
+      </div>
+      }
     if(!data){
         return ''
     }
+    
 
     return (
         <div style={{marginTop:'45px'}}>

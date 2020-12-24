@@ -6,6 +6,7 @@ import ProfileCard from './ProfileCard'
 import { PostCounts, savedPosts } from './helper'
 import Deatils from './Deatils'
 
+
 function Profile(props) {
     const { user, token } = isAuthincated()
 
@@ -17,7 +18,7 @@ function Profile(props) {
         name : '',
         email : '',
         username : '',
-        verified : false,
+        verified : '',
         textColor: '',
         cardColor: '',
         loading : false,
@@ -42,15 +43,12 @@ function Profile(props) {
 
     const [end, setEnd] = useState(false)
 
-    let limit = 3
-
-    console.log(post)
-
+    const [profile, setprofile] = useState('')
+    let limit = 6
 
     //****Verified will save on user database only and will be populated through user id in post request */
-    const { joines ,joined , description , name , email , username ,verified ,textColor ,cardColor ,loading,intLoding, _id} = data
+    const { loading,intLoding} = data
 
-    
     let profileid = ''
     if(props.match.params.value === 'me'){
         profileid = user._id
@@ -58,22 +56,33 @@ function Profile(props) {
     else if(props.match.params.value){
         profileid = props.match.params.value
     }else{
-        profileid = user._id
+        profileid = user._id 
     }
+    console.log(post)
+  useEffect(() => {
+      onClickAllPost()
+      setprofile(window.location.href)// eslint-disable-next-line 
+  }, [window.location.href])
+
+    
+
     useEffect(() => {
         setData({...data,loading :true})
-        setTimeout(() => {
         PostCounts(profileid , token)
         .then(data =>{
            setCounts(data) 
-        })
-        }, 2000);
-    }, [])
+        })// eslint-disable-next-line 
+    }, [profile])
 
     useEffect(() => {
-        setTimeout(() => {
-            getUserById( profileid , token)
+            getUserById( profileid, token)
             .then(data =>{
+                if(!data){
+                    return setData([])
+                }
+                if(data.error){
+                    return setData([{name : 'No user found'}])
+                }
                 setData({
                     _id : data._id,
                     joines : data.joines.count,
@@ -82,35 +91,40 @@ function Profile(props) {
                     name : data.name,
                     email : data.email,
                     username : data.username ,
-                    verified : true,
+                    verified : data.verified,
                     textColor: data.color.textColor,
                     cardColor: data.color.cardColor
                 })
-            })
-        },2000)
-    },[profileid])
+            })// eslint-disable-next-line 
+    },[profile])
+
+    
 
     useEffect(() => {
-        console.log('load Post triggered')
         if(end)return(setloadsAll(false));
         if(!loadsAll)return;
         setBottomLoding(true)
-        getPostByUserId(profileid , token, skip , limit)
+            getPostByUserId(profileid, token, skip , limit)
         .then(data =>{
-            if(data.length < limit || data.length === 0){
-                setEnd(true)
+            if(!data){
+                return setPost([])
             }
-                console.log('1')
-                setTimeout(() => {
+            if(data.error){
+                return setPost([])
+            }
+            if(data.length < limit || data.length === 0){
+              setEnd(true)
+            }
                     let newData = post.concat([data])
                     setPost(newData)
                     setBottomLoding(false)
                     setloadsAll(false)
-                },2000)
+                    
         })
-        let nextCount = skip + limit
+        let nextCount = skip + limit 
         setSkip(nextCount)
         
+        // eslint-disable-next-line 
     },[loadsAll])
 
     useEffect(() => {
@@ -119,37 +133,36 @@ function Profile(props) {
             if(!loadsPosts)return;
             if(highlight === 'saved'){
                 setBottomLoding(true)
-                savedPosts(profileid , token , skip,limit)
+                    savedPosts(profileid, token , skip,limit)
                 .then(data =>{
-                    console.log(data.savedPost.length , 'Data length')
-                    if(data.savedPost.length < limit || data.savedPost.length === 0){
+                    if(!data){
                         setEnd(true)
+                        return setPost([])
                     }
-                        console.log('1')
-                        setTimeout(() => {
+                    if(data.error){
+                        setEnd(true)
+                        return setPost([])
+                    }
+                    if(data.savedPost.length < limit || data.savedPost.length === 0){
+                       setEnd(true)
+                    }
                             let newData = post.concat([data.savedPost])
                             setPost(newData)
                             setBottomLoding(false)
                             setLoadsPosts(false)
-                        },2000)
                 })
+                
                 let nextCount = skip + limit
                 setSkip(nextCount)
             }
         }
-        
+        // eslint-disable-next-line 
     },[loadsPosts])
 
-
-
-
-    useEffect(() => {
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, [loadsPosts, loadsAll]);
-
-
-
+    // useEffect(() => {
+    //     window.addEventListener('scroll', handleScroll);
+    //     return () => window.removeEventListener('scroll', handleScroll); // eslint-disable-next-line 
+    // }, [loadsPosts, loadsAll]);
 
     const onClickAllPost =  () =>{
         setEnd(false)
@@ -178,10 +191,8 @@ function Profile(props) {
         setClickedMore(false)
         setHighlight('mentions')
         setData({...data,intLoding : true})
-        setTimeout(() => {
         setPost([])
         setData({...data,intLoding : false})
-        }, 2000);
     }
 
     const onClickSave = () =>{
@@ -200,10 +211,8 @@ function Profile(props) {
         setClickedMore(true)
         setHighlight('saved')
         setData({...data,intLoding : true})
-        setTimeout(() => {
         setPost([])
         setData({...data,intLoding : false})
-        }, 2000);
     }
 
     let allHighLight = {color : '#7f7f7f'}
@@ -234,19 +243,20 @@ function Profile(props) {
             postsHighLight = {color : '#7f7f7f'}
             mentionHighLight = {color : '#7f7f7f'}
             savedHighLight = {color : '#252d2d'}
-}
+    }
     }
 
     
-    function handleScroll() {
-        if (window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight) return;
-        if(highlight === 'all' || highlight === 'posts'){
-                setloadsAll(true);
-            }
-        else if (highlight === 'saved'){
-                    setLoadsPosts(true);
-                }
-        }
+    // function handleScroll() {
+    //     if (window.innerHeight + document.documentElement.scrollTop  !== document.documentElement.offsetHeight) return;
+    //     if(highlight === 'all' || highlight === 'posts'){
+    //             setloadsAll(true);
+    //         }
+    //     else if (highlight === 'saved'){
+    //                 setLoadsPosts(true);
+    //             }
+    //     }
+
     let noPost =''
     let createPostStyle = 'btn-floating btn-large black'
     
@@ -255,8 +265,14 @@ function Profile(props) {
     }else if (bottomLoding){
         noPost =''
     }
+    // eslint-disable-next-line 
     else if( post.map((postData)=>(postData.length)) == 0 ) {
-        noPost ='Not yet posted'
+        if(highlight === 'mentions'){
+            noPost ='Mentions are not active yet'
+        }else{
+            noPost ='Not yet posted'
+        }
+        
         createPostStyle = 'btn-floating btn-large black pulse'
     }
     if(user._id !== profileid){
@@ -290,9 +306,7 @@ function Profile(props) {
 }
     let displayBotomLoding = ''
     if(bottomLoding){
-        displayBotomLoding = <div class="progress" style={{marginBottom : '40px'}}>
-        <div class="indeterminate"></div>
-      </div>
+        displayBotomLoding = <div class="loader text-center"></div>
     }
     if(loading){
         return (
@@ -307,31 +321,35 @@ function Profile(props) {
         let showSavedPost = ''
         if(user._id === profileid){
             showSavedPost =<th className='text-center  profile-nav'>
-            <a onClick={() => onClickSave()} style={savedHighLight} >Saved  </a>
+            <Link onClick={() => onClickSave()} style={savedHighLight} >Saved  </Link>
         </th>
         }else{
             showSavedPost =<th className='text-center  profile-nav'>
-                     <a onClick={() => onClickMore()} style={savedHighLight} > More  </a>
+                     <Link onClick={() => onClickMore()} style={savedHighLight} > More  </Link>
                 </th>
         }
+        
         return (
             <div >
+               
                 
                 <div class="row">
+                
                     <div class="col s12 m6">
                         {/***Crad here */}
                         <ProfileCard data={data} post={post} />
+                   
                     </div>
                     <table className='bm0 profile-nav' >
                                 <tr  >
                                     <th className='text-center  profile-nav ' style={{paddingLeft: '5px'}} >
-                                    <a onClick={() => onClickAllPost()} style={allHighLight}  >All </a>
+                                    <Link onClick={() => onClickAllPost()} style={allHighLight}  >All </Link>
                                     </th>
                                     <th className='text-center  profile-nav'   >
-                                    <a onClick={() => onClickPost()} style={postsHighLight} >Posts {counts.posts}</a>
+                                    <Link onClick={() => onClickPost()} style={postsHighLight} >Posts {counts ?  counts.posts : ''}</Link>
                                     </th>
                                     <th className='text-center  profile-nav' >
-                                        <a onClick={()=> onClickMentions()} style={mentionHighLight} >Mentions </a>
+                                        <Link onClick={()=> onClickMentions()} style={mentionHighLight} >Mentions </Link>
                                     </th>
                                     {showSavedPost}
                                 </tr>
@@ -340,14 +358,19 @@ function Profile(props) {
                 {/*** Print posts here */}
                 {rednderData}
                 {displayBotomLoding}
+                {!end && !bottomLoding && !noPost?(<div className='text-center loadbtnshell' >
+                    <p className='loadbtn' onClick={() => highlight === 'all' || highlight === 'post' ? setloadsAll(true) : setLoadsPosts(true)   } >{end ? 'No more load' : 'Load more'}</p>
+                </div>)
+                    : <div className='text-center loadbtnshell' >
+                        <p className='text-center notice' style={{margin : '10px'}} >{!end || noPost === 'Not yet posted' ? '' : <span>Looks like <b style={{color : 'black'}}>End</b> of profile page create more cards to showcase them</span>}</p>
+                        </div> 
+                    }
                 {/***create post buttton */}
-                <div class="fixed-action-btn">
-                    <Link className={createPostStyle} to='/post'>
-                        <i class="large material-icons ">mode_edit</i>
+                <div class="fixed-action-btn" id='mydiv' >
+                    <Link  className={createPostStyle} to='/add/post' >
+                        <i id='mydiv'  class="large material-icons ">mode_edit</i>
                     </Link>
-                </div>
-               
-                
+                </div> 
             </div>
         )
     }   

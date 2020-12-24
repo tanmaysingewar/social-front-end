@@ -16,7 +16,7 @@ function TopNavBar() {
         }
         
 
-        let displayNavBar = ''
+        let displayNavBar = {}
         if (shownavbar) {
             displayNavBar = {top: '0'}
         }else{
@@ -31,7 +31,7 @@ function TopNavBar() {
                     {/* <span class="material-icons">
                         keyboard_backspace
                     </span> */}
-                     <Link to='/' style={{float : 'right'}} ><i  class="large material-icons " style={{fontSize: '25px',paddingRight : '10px'}}>settings</i></Link>
+                     <Link to='/setting' style={{float : 'right'}} ><i  class="large material-icons " style={{fontSize: '25px',paddingRight : '10px'}}>settings</i></Link>
                     <Link className='logo-name' to='/' >Ficktree</Link>
                    
                  </div>    

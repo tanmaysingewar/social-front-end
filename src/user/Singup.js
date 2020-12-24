@@ -1,10 +1,9 @@
 import React,{useState} from 'react'
-import { Redirect } from 'react-router-dom'
-import { checkUsername, singup , authincate, isAuthincated} from '../auth/helper'
+import { Link, Redirect } from 'react-router-dom'
+import { checkUsername, singup , authincate} from '../auth/helper'
 
 
 function Singup() {
-  const { user } = isAuthincated()
   const [values, setValues] = useState({
     name: '',
     email:'',
@@ -17,7 +16,11 @@ function Singup() {
 
   const [check, setCheck] = useState('')
 
-  const {name,email,username, password,error,success,param} = values
+  const [intLoading, setintLoading] = useState(false)
+
+  const [disableButton, setdisableButton] = useState(false)
+
+  const {name,email,username, password,success,param} = values
   
   let usernameAvailable = ''
   let nameError =''
@@ -63,13 +66,20 @@ function Singup() {
       usernameAvailable = ''
       usernameError = '*Username is require*'
     }
+    if (check === 'sm') {
+      usernameAvailable = ''
+      usernameError = '*Something went wrong*'
+    }
   }
   
   const handleChange  = name => event =>{
-    setValues({...values,error:false,[name]: event.target.value})
     if ([name]=='username') {
       trigureUsername(event.target.value)
+      let nsusername =event.target.value.replace(/ /g,"")
+     return setValues({...values,error:false,[name]: nsusername})
     }
+    setValues({...values,error:false,[name]: event.target.value})
+    
   }
   
   const trigureUsername = (username) =>{
@@ -79,6 +89,9 @@ function Singup() {
     }else{
       checkUsername({username})
     .then(data =>{
+      if(!data){
+       return setCheck('sm')
+      }
       if (data.error) {
         setCheck(data.error)
       }else{
@@ -90,8 +103,10 @@ function Singup() {
 
   const onSubmit = event =>{
     event.preventDefault()
+    setdisableButton(true)
+    setintLoading(true)
     setValues({...values,error:true})
-    if (check=='avaliable' && name && email && username && password ) {
+    if (check==='avaliable' && name && email && username && password ) {
     singup({name,email,username, password})
     .then(data =>{
         if (data.error) {
@@ -113,7 +128,6 @@ function Singup() {
               setValues({
                   ...values,
                   name:'',
-                  email:'',
                   username:'',
                   password:'',
                   error:'',
@@ -121,29 +135,43 @@ function Singup() {
               })
           }
         }     
+        setdisableButton(false)
+        setintLoading(false)
     })
     .catch(console.log('Error in Singup'))
   }else{
     if (name ==='' || email ==='' || username ==='' || password ==='')  {
       setValues({...values,param: 'checkValues'})
+      setdisableButton(false)
+      setintLoading(false)
     }
   }
 }
   
 const performRedirection =()=>{
   if (success) {
-  return <Redirect to={'/profile/'+user._id} />
+  return <Redirect to={`/conformId/${email}`} />
   }
+}
+
+let rednderData = ''
+if(intLoading){
+  rednderData =  <div class="progress">
+  <div class="indeterminate"></div>
+</div>
 }
 
 const form =()=>{
  return(
+   <>
+      
           <div className="row" style={{marginTop:'45px'}}>
             <div className="col s12 m6">
-                <h2 className='text-center welcome-text'>Welcome!!</h2>
+                {/* <h2 className='text-center welcome-text'>Welcome!!</h2> */}
               <div className="card ">
                 <div className="card-content ">
-                    <h3 className='text-center'>Sing Up</h3>
+                {rednderData}
+                    <h4 className='text-center'>Sing Up</h4>
                   <div className="row">
                       <p className='warning text-center'>{finalCheck}</p>
                     <form className="col s12" autoComplete='off'>
@@ -178,8 +206,9 @@ const form =()=>{
                       </div>
                       <div className="row singin-form">
                         <div className="input-field col s12 text-center">
-                          <button className="btn waves-effect waves-light" type="submit" name="action" onClick={onSubmit}>Submit
-                          </button>
+                          <button className="btn waves-effect waves-light" id="mySubmit"  disabled={disableButton} type="submit" name="action" onClick={onSubmit}>Submit
+                          </button><br/><br/>
+                          <p>I already have account <Link to='/singin'>SingIn</Link></p>
                         </div>
                       </div>
                     </form>
@@ -188,6 +217,7 @@ const form =()=>{
               </div>
             </div>
           </div>
+          </>
         )
       }
 return (

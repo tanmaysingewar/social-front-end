@@ -1,14 +1,22 @@
-import React,{useState} from 'react'
-import { searchUser } from '../auth/helper'
+import React,{useState, useEffect} from 'react'
+import { getAllPost, getPostSerch, isAuthincated, searchUser } from '../auth/helper'
+import Card from '../core/Card'
 import SerchReasult from '../core/SerchReasult'
+import { TopUsers } from './helper'
 
 
 function Search() {
+
+    const {token } = isAuthincated()
     const [search, setSearch] = useState({
         searchTerm : ''
     })
 
     const [searchData, setSerchData] = useState('')
+
+    const [TopUser, setTopUser] = useState('')
+
+    const [TopPost, setTopPost] = useState('')
 
     const [loading, setLoading] = useState(false)
 
@@ -24,6 +32,36 @@ function Search() {
         setLoading(false)
     } 
 
+    useEffect(() => {
+        setLoading(true)
+        setTimeout(() => {
+            TopUsers(token)
+            .then(data =>{
+                if(!data){
+                    setTopUser('')
+                }
+                if(data.error){
+                    setTopUser('')
+                }
+                setTopUser(data.user)
+            })
+            
+            getPostSerch(token , 0 , 3)
+            .then(data =>{
+                if(!data){
+                    setTopPost('')
+                }
+                if(data.error){
+                    setTopPost('')
+                }
+                console.log(data)
+                setTopPost(data.post)
+                setLoading(false)
+            })   
+        }, 2000);
+        
+    }, [])
+
     
     const onSerch = (search) =>{
         setLoading(true)
@@ -32,14 +70,12 @@ function Search() {
             return setSerchData('')
          }
          
-        setTimeout(() => {
              // lOding query place here
              searchUser(search)
                  .then(data =>{
                  setSerchData(data)
                  setLoading(false)
              })
-        }, 2000);
         
     }  
     let result = ''
@@ -51,13 +87,41 @@ function Search() {
                 </div>
     }
     if (searchData === '') {
-        result = ''
+        ///******Your code here */
+        // result = ''
+        if(TopUser === '' || TopPost === ''){
+            result = ''
+        }else{
+            result =<>
+             <div class="row" tyle={{float : 'left'}}>
+                <span className='mini-title'>Top users</span> 
+                {TopUser ? TopUser.map((data) => < SerchReasult  data={data} /> ): ''}
+                </div>
+            <div>
+                <div style={{paddingTop : '10px'}}>
+                <span  className='mini-title'>Top posts</span>
+                 { TopPost ? TopPost.map((cardData,index) =>{
+                    return <Card key={index} cardData={cardData} />
+                    })
+                 : ''}
+                </div>
+            </div>
+            </>
+        }
     }else{
-        
-        if (searchData.msg == 'No search Found') {
-            noresult = searchData.msg
-        } else {
-            result = searchData.data.map((data) => < SerchReasult  data={data} />)
+        if(!searchData){
+             noresult ='Not able to connect'
+        }else{
+            if (searchData.msg === 'No search Found' || !searchData) {
+                noresult = searchData.msg ? searchData.msg : 'No search Found'
+            } else {
+                result =(
+                    <div class="row" tyle={{float : 'left'}}>
+                       { searchData.data.map((data) => < SerchReasult  data={data} />)}
+
+                    </div>
+                ) 
+            }
         }
     }
     return (
@@ -65,19 +129,21 @@ function Search() {
             <div style={{padding : '10px'}}>
                 <nav>
                     <div class="nav-wrapper">
-                        <form autoComplete='off'>
+                        <form autoComplete='off' de>
                             <div class="input-field black" style={{padding : '0px'}}>
-                                <input id="search" type="search" required onChange={handleChang('searchTerm')} value={searchTerm} />
+                                <input id="text" type="search" required onChange={handleChang('searchTerm')} value={searchTerm} />
                                 <label class="label-icon" for="search"><i class="material-icons">search</i></label>
-                                <i class="material-icons" onClick={() => onClear()} >close</i>
+                                <i class="material-icons " style={{WebkitTapHighlightColor : 'transparent'}} onClick={() => onClear()} >close</i>
+                                <button onClick={(event) => event.preventDefault()} type='submit' style={{display : 'none'}} ></button>
                             </div>
                         </form>
                     </div>
                 </nav>
             </div>
             {loder}
-            <h5 className='text-center notice mt-5'>{noresult}</h5>
             {result}
+            <h5 className='text-center notice mt-5'>{noresult}</h5>
+            
         </div>
     )
 }

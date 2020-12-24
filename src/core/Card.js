@@ -29,28 +29,30 @@ function Card({index , cardData, showComment = false}) {
     isPostSaved(cardData._id, user._id, token)
     .then(data => {
       setSave(data.msg)
-    })
+    })// eslint-disable-next-line 
   }, [cardData._id])
 
   
   //Todo: verified should come here also
-  let verified = true
   let vSvg = ''
-  if (verified === true) {
-    vSvg = <VerifiedSvg color={cardData.color.textColor}/>
-    }else{
-    vSvg = ''
-}
+  if(cardData.author){
+    if (cardData.author.verified === true ) {
+      vSvg = <VerifiedSvg color={cardData.color.textColor}/>
+      }else{
+      vSvg = ''
+  }
+  }
+  
   
   let likeclass = 'material-icons'
 
   if(like){
     likeclass = 'material-icons likeIcon'
-    cardData.likes.count = cardData.likes.count 
+    // cardData.likes.count = cardData.likes.count 
   }
 
   const onLike = (likeclass) =>{
-    if (likeclass == 'material-icons likeIcon') {
+    if (likeclass === 'material-icons likeIcon') {
       cardData.likes.count = cardData.likes.count - 1
       setLike('disliked')
     }else{
@@ -62,14 +64,14 @@ function Card({index , cardData, showComment = false}) {
 
   if(like === 'liked'){
     likeclass = 'material-icons likeIcon'
-    cardData.likes.count = cardData.likes.count 
+    // cardData.likes.count = cardData.likes.count 
   }
   if(like === 'disliked'){
     likeclass = 'material-icons'
-    cardData.likes.count = cardData.likes.count 
+    // cardData.likes.count = cardData.likes.count 
   }
  
-  let commentData = ''
+  let commentData = 'Add comments'
   if(cardData.comments.count > 0){
   commentData =  `See all ${cardData.comments.count} comments`
   }
@@ -93,10 +95,10 @@ function Card({index , cardData, showComment = false}) {
   }
 
   const onSavePost = () =>{
-    if(save == 'unsaved'){
+    if(save === 'unsaved'){
       setSave('saved')
     }
-    if(save == 'saved'){
+    if(save === 'saved'){
       setSave('unsaved')
     }
     savePost(cardData._id, user._id, token)
@@ -125,10 +127,10 @@ function Card({index , cardData, showComment = false}) {
 
       return <div class="col s11 ">
       {/***Add link to the see all comment page  */}
-          <span style={{fontSize : '13px'}}><Link to={"/post/allcomments/"+ cardData._id} style={{color : 'black'}}>{commentData}</Link></span>
+          <span style={{fontSize : '12px'}}><Link to={"/post/allcomments/"+ cardData._id} className='notice'>{commentData}</Link></span>
             <div className='input-field commentSection'>
               <input className="commentitextarea" data-length="100" placeholder='Comment' onChange={handleChange('comment')} value={comment} autoComplete='off' />
-                <i class="material-icons prefix" onClick={onComment}  style={{fontSize : '23px',marginTop : '1px',marginLeft : '5px'}}>send</i>
+                <i class="material-icons prefix" onClick={onComment}  style={{fontSize : '23px',marginTop : '-2px',marginLeft : '5px'}}>send</i>
                {displayComment}
             </div>
             
@@ -150,35 +152,37 @@ function Card({index , cardData, showComment = false}) {
 
   let deleteButton = ''
   
-  if (user._id === cardData.author._id) {
-    deleteButton = <span class="material-icons"> delete </span>
-  }
+  if(cardData.author){if (user._id === cardData.author._id) {
+    deleteButton = <span class="material-icons" onClick={() => setDeletePost(true)}> delete </span>
+  }}
 
     let render = ''
-    if(!deletePost){
+    if(!cardData.author){
+      return render =''
+    }
+    if(!deletePost ){
       render =  <div class="row bm0">
                   <div class="col s12 m6">
                     <div class="card bm0" key={index} style={{background : cardData.color.cardColor }}>
                       <div class="card-content bm0">
                         <div className='input-field' >
                           <table border='2px solid'>
-                            <td className='authername' style={{color : cardData.color.textColor}}><span>@{cardData.author.username}</span></td>
+                            <td className='authername' style={{color : cardData.color.textColor}}><Link to={'/profile/'+ cardData.author._id}><span style={{color : cardData.color.textColor}}>@{cardData.author ? cardData.author.username : ''}</span></Link></td>
                             <td className='svgverify'>{vSvg}</td>
                             <td className='collection-icon' ><div onClick={() => onSavePost()}><Bookmark color={cardData.color.textColor} saved={save}/></div></td>
                           </table>
                         </div>
-                          <span class="card-title" style={{color : cardData.color.textColor}}>{cardData.postTitle}</span>
-                          <p class="justify" style={{color : cardData.color.textColor}}>{cardData.post}</p><br/>
+                          <span class="card-title truncate" style={{color : cardData.color.textColor}}>{cardData.postTitle}</span>
+                          <p class="justify " style={{color : cardData.color.textColor, whiteSpace: 'pre-line'}}>{cardData.post}</p><br/>
                           <p className='dateoncard'  style={{color : cardData.color.textColor}}>{dt+'-' + month + '-'+year}</p>
                       </div>
                     </div>
                     <table className='liketable'>
                           <td className='liketdwidth' onClick={()=> onLike(likeclass)}><i className={likeclass}>thumb_up</i></td>
                           <td><spam>{cardData.likes.count}</spam></td>
-                    <td style={{float : 'right', paddingRight: '10px'}} onClick={() => setDeletePost(true)}>{deleteButton}</td>
+                    <td style={{float : 'right', paddingRight: '10px'}} >{deleteButton}</td>
                     </table>
                     {commentSection()}
-                  
                 </div>
               </div>
             }

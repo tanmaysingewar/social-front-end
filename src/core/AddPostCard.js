@@ -3,6 +3,9 @@ import React from 'react'
 function AddPostCard({values, username}) {
     const{title,post,textColor,cardColor} = values
 
+    if(!values){
+        return ''
+    }
     return (
         <div>
             <div class="row" style={{marginTop : '40px'}} >
@@ -18,9 +21,9 @@ function AddPostCard({values, username}) {
                                 </table>
                             </div>
                             <div style={{color : textColor}}>
-                                <span class="card-title">{title}</span>
+                                <span class="card-title truncate">{title}</span>
                             {/* <span class="card-title">Card Title</span> */}
-                                <p class="" id="postInput">{post}</p><br/>
+                                <p class=" description-text" id="postInput">{post}</p><br/>
                             </div>
                         </div>
                     </div>

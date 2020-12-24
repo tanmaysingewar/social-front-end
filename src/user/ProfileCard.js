@@ -7,7 +7,7 @@ import { isUserJoined , JoinUser } from './helper'
 
 function ProfileCard({data ,update}) {
 
-    const { joines ,joined , description , posts  , name , email , username ,verified ,cardColor,textColor, _id} = data
+    const { joines ,joined , description , name , username ,verified ,cardColor,textColor, _id} = data
     const {user , token} = isAuthincated()
     const [join, setJoin] = useState(false)
 
@@ -15,10 +15,9 @@ function ProfileCard({data ,update}) {
        if(_id){
         isUserJoined(_id , token)
         .then(data => {
-            console.log(data)
             setJoin(data.msg)
         })
-       }
+       }// eslint-disable-next-line 
     }, [_id])
 
     const onClickJoin = () => {
@@ -29,6 +28,9 @@ function ProfileCard({data ,update}) {
         }
         JoinUser(_id , token)
         .then(data =>{
+            if(!data){
+                return setJoin(false)
+            }
             setJoin(data.msg)
         })
     } 
@@ -65,7 +67,7 @@ function ProfileCard({data ,update}) {
                         </tr>
                     </table>
                         <span>{name}</span>
-                    <div className='joining-section' >
+                    <div className='joining-section'>
                         <span className='heading' style={{color : textColor}}>Joines: {joines}</span><span className='heading ml-5' style={{color : textColor}}>Joined: {joined}</span>
                     </div>
                         <span className='description-text'>{description}</span>
