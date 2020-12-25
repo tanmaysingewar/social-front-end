@@ -1,1 +1,1 @@
-export const API='http://localhost:8080/api'
+export const API='https://lit-retreat-32005.herokuapp.com/api/'
