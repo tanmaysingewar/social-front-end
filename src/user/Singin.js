@@ -109,17 +109,19 @@ function Singin() {
         <div>
           <div class="row" style={{marginTop:'45px'}}>
             <div class="col s12 m6">
-                  <h2 className='text-center welcome-text'>Welcome!!</h2>
+
+            <p className='text-center'><h4><b>ficktree</b></h4></p>
               <div class="card ">
                 <div class="card-content ">
                   {rednderData}
-                  <h3 className='text-center'>Sing In</h3>
+                  
+                  <h4 className='text-center'>Log In</h4>
                       <p className='warning text-center'>{mainMessage}</p>
                   <div class="row">
                     <form class="col s12" autoComplete='off'>
                       <div class="row singin-form">
                         <div class="input-field col s12">
-                          <input id="email" type="text" class="validate" placeholder='Email' onChange={handleChange('email')} value={email} />
+                          <input id="email" type="email" class="validate" placeholder='Email' onChange={handleChange('email')} value={email} />
                             {/* Email is require represent only after if noting is in input field */}
                             <p className='warning'>{emailMessage}</p>
                         </div>

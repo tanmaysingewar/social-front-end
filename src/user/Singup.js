@@ -20,6 +20,10 @@ function Singup() {
 
   const [disableButton, setdisableButton] = useState(false)
 
+  const [nameErrormsg, setNameErrormsg] = useState('')
+
+  const [usernameErrormsg, setusernameErrormsg] = useState('')
+
   const {name,email,username, password,success,param} = values
   
   let usernameAvailable = ''
@@ -72,13 +76,27 @@ function Singup() {
     }
   }
   
-  const handleChange  = name => event =>{
-    if ([name]=='username') {
+  const handleChange  = namez => event =>{
+    if ([namez]=='username') {
+      if(event.target.value.length > 30){
+        setusernameErrormsg('username is too long')
+        return setValues({...values,error:false,[namez]: username})
+      }
+      setusernameErrormsg('')
       trigureUsername(event.target.value)
       let nsusername =event.target.value.replace(/ /g,"")
-     return setValues({...values,error:false,[name]: nsusername})
+     return setValues({...values,error:false,[namez]: nsusername})
     }
-    setValues({...values,error:false,[name]: event.target.value})
+
+    if([namez]=='name'){
+      if(event.target.value.length > 30){
+        setNameErrormsg('name is too long')
+        return setValues({...values,error:false,[namez]: name})
+      }
+      setNameErrormsg('')
+      setValues({...values,error:false,[namez]: event.target.value})
+    }
+    setValues({...values,error:false,[namez]: event.target.value})
     
   }
   
@@ -171,7 +189,7 @@ const form =()=>{
               <div className="card ">
                 <div className="card-content ">
                 {rednderData}
-                    <h4 className='text-center'>Sing Up</h4>
+                    <h4 className='text-center'>Sign up</h4>
                   <div className="row">
                       <p className='warning text-center'>{finalCheck}</p>
                     <form className="col s12" autoComplete='off'>
@@ -179,20 +197,20 @@ const form =()=>{
                         <div className="input-field col s12">
                           <input id="first_name" type="text" className="validate" placeholder='Name' onChange={handleChange('name')} value={name} required/>
                           {/* Name is require represent only after if noting is in input field */}
-                          <p className='warning'>{nameError}</p>
+                          <p className='warning'>{nameError ? nameError : nameErrormsg}</p>
                         </div>
                       </div>
                       <div className="row singin-form">
                         <div className="input-field col s12">
                           <input id="username" type="text" className="validate" placeholder='Username' onChange={handleChange('username')} value={username} required/>
                           {/* Password is require represent only after if noting is in input field */}
-                          <p className='warning'>{usernameError}</p>
-                          <p className='success'>{usernameAvailable}</p>
+                          <p className='warning'>{usernameError ? usernameError : usernameErrormsg}</p>
+                          <p className='success'>{!usernameErrormsg ? usernameAvailable : ''}</p>
                         </div>
                       </div>
                       <div className="row singin-form">
                         <div className="input-field col s12">
-                          <input id="email" type="text" className="validate" placeholder='Email'  onChange={handleChange('email')} value={email} required  />
+                          <input id="email" type="email" className="validate" placeholder='Email'  onChange={handleChange('email')} value={email} required  />
                           {/* Email is require represent only after if noting is in input field */}
                           <p className='warning'>{emailError}</p>
                         </div>
@@ -208,7 +226,7 @@ const form =()=>{
                         <div className="input-field col s12 text-center">
                           <button className="btn waves-effect waves-light" id="mySubmit"  disabled={disableButton} type="submit" name="action" onClick={onSubmit}>Submit
                           </button><br/><br/>
-                          <p>I already have account <Link to='/singin'>SingIn</Link></p>
+                          <p>I already have account <Link to='/singin'>Log In</Link></p>
                         </div>
                       </div>
                     </form>

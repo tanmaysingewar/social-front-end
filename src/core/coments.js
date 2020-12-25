@@ -11,7 +11,6 @@ function Coments(props) {
 
     useEffect(() => {
         setLoading(true)
-        setTimeout(() => {
             getAllComments(props.match.params.value, token)
         .then(data =>{
             if(!data){
@@ -23,7 +22,6 @@ function Coments(props) {
             setData(data.post)
             setLoading(false)
         })// eslint-disable-next-line 
-        }, 2000);
         
     }, [])
 

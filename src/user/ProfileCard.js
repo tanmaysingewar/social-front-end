@@ -9,7 +9,7 @@ function ProfileCard({data ,update}) {
 
     const { joines ,joined , description , name , username ,verified ,cardColor,textColor, _id} = data
     const {user , token} = isAuthincated()
-    const [join, setJoin] = useState(false)
+    const [join, setJoin] = useState('loading')
 
     useEffect(() => {
        if(_id){
@@ -44,7 +44,12 @@ function ProfileCard({data ,update}) {
 
     let showButton =''
     if(_id !== user._id){
-    showButton = <button className='btn-small joinbth'  style={!join ?{background : 'black'} :{background : 'transparent', color : 'black'} }  onClick={() => onClickJoin()}>{join ? 'Joined' : 'Join'}</button>
+        if(join === 'loading'){
+             showButton = <button className='btn-small joinbth'  style={{background : 'transparent', color : 'black'} } >{'loading...'}</button>
+        }else{
+            showButton = <button className='btn-small joinbth'  style={!join ?{background : 'black'} :{background : 'transparent', color : 'black'} }  onClick={() => onClickJoin()}>{join ? 'Joined' : 'Join'}</button>
+        }
+    
     }
 
     if(!update && user._id === _id){

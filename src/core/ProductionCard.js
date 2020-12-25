@@ -13,7 +13,7 @@ function ProductionCard() {
                     <div class="card-panel teal black white-text">
                         <h5 style={{fontFamily : 'Teko, sans-serif'}}>Tanmay Singewar Production</h5>
                         <div style={{fontSize : '12px'}}>
-                            <div><span>Tanmay Singewar, CEO, Founder</span></div>
+                            <div><span>Tanmay Singewar</span></div>
                             <span>singewartanmay@gmail.com</span><br/><br/>
                             <span>Web Developers</span>
                             
@@ -24,8 +24,16 @@ function ProductionCard() {
                                 <h5>Recent Projects</h5>
                                 <table className='text-center'>
                                     <tr className='text-center'>
-                                        <td ><a href='https://radiant-cove-28954.herokuapp.com/'>Weather Forecast</a></td>
-                                        <td className='text-center'><a href='https://tanmaysingewar-news-site.herokuapp.com/'>News Site</a></td>
+                                        <td className='text-center'><span><b>Weather Forecast</b></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td className='text-center'>Show weather forecast of your city. Just enter your city name and the application will show the temperature, wind speed & direction, climate conditions, humidity</td>
+                                    </tr>
+                                    <tr>
+                                    <td className='text-center'><span><b>News Site</b></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td className='text-center'>Current news and events according to category & also a special section of COVID-19 counts daily updated records. You can also search your personal interest topics and  category </td>
                                     </tr>
                                 </table>
                             </div><br/>

@@ -34,14 +34,13 @@ function Search() {
 
     useEffect(() => {
         setLoading(true)
-        setTimeout(() => {
             TopUsers(token)
             .then(data =>{
                 if(!data){
-                    setTopUser('')
+                   return setTopUser('')
                 }
                 if(data.error){
-                    setTopUser('')
+                    return setTopUser('')
                 }
                 setTopUser(data.user)
             })
@@ -49,16 +48,15 @@ function Search() {
             getPostSerch(token , 0 , 3)
             .then(data =>{
                 if(!data){
-                    setTopPost('')
+                    return setTopPost('')
                 }
                 if(data.error){
-                    setTopPost('')
+                    return  setTopPost('')
                 }
                 console.log(data)
                 setTopPost(data.post)
                 setLoading(false)
             })   
-        }, 2000);
         
     }, [])
 
@@ -125,13 +123,13 @@ function Search() {
         }
     }
     return (
-        <div className='card-content' style={{marginTop : '45px'}} >
-            <div style={{padding : '10px'}}>
+        <>
+            <div style={{padding : '10px' , marginTop : '50px'}}>
                 <nav>
-                    <div class="nav-wrapper">
-                        <form autoComplete='off' de>
-                            <div class="input-field black" style={{padding : '0px'}}>
-                                <input id="text" type="search" required onChange={handleChang('searchTerm')} value={searchTerm} />
+                    <div class="nav-wrapper" >
+                        <form autoComplete='off' >
+                            <div class="input-field black" style={{borderRadius : '50px', border : '1px solid dimgray'}} >
+                                <input  type="search" style={{borderRadius : '50px'}}  required onChange={handleChang('searchTerm')} value={searchTerm} />
                                 <label class="label-icon" for="search"><i class="material-icons">search</i></label>
                                 <i class="material-icons " style={{WebkitTapHighlightColor : 'transparent'}} onClick={() => onClear()} >close</i>
                                 <button onClick={(event) => event.preventDefault()} type='submit' style={{display : 'none'}} ></button>
@@ -143,8 +141,7 @@ function Search() {
             {loder}
             {result}
             <h5 className='text-center notice mt-5'>{noresult}</h5>
-            
-        </div>
+           </> 
     )
 }
 export default Search

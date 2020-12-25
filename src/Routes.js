@@ -14,7 +14,7 @@ import ConformIdRoutes from './ConformIdRoutes'
 import Otp from './core/Otp'
 import Alert from './user/Alert'
 import Introduction from './core/Introduction'
-import ProductionCard from './core/svg/ProductionCard'
+import ProductionCard from './core/ProductionCard'
 import Setting from './user/Setting'
 
 function Routes() {

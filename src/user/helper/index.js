@@ -129,3 +129,20 @@ export const TopUsers = ( token) =>{
     return res.json()
 })
 .catch(err => console.log(err))}
+
+
+
+export const postReview = (review , token)=>{
+    return fetch(`${API}/review`,{
+        method : 'POST',
+        headers:{
+            Accept: 'application/json',
+            'Content-Type' : 'application/json',
+            Authorization : `Bearer ${token}`
+    },
+    body: JSON.stringify({review})
+})
+.then(res =>{
+    return res.json()
+})
+.catch(err => console.log(err))}

@@ -119,7 +119,6 @@ function Profile(props) {
                     setPost(newData)
                     setBottomLoding(false)
                     setloadsAll(false)
-                    
         })
         let nextCount = skip + limit 
         setSkip(nextCount)
@@ -359,7 +358,7 @@ function Profile(props) {
                 {rednderData}
                 {displayBotomLoding}
                 {!end && !bottomLoding && !noPost?(<div className='text-center loadbtnshell' >
-                    <p className='loadbtn' onClick={() => highlight === 'all' || highlight === 'post' ? setloadsAll(true) : setLoadsPosts(true)   } >{end ? 'No more load' : 'Load more'}</p>
+                    <p className='loadbtn' onClick={() => highlight === 'all' || highlight === 'posts' ? setloadsAll(true) : setLoadsPosts(true)   } >{end ? 'No more load' : 'Load more'}</p>
                 </div>)
                     : <div className='text-center loadbtnshell' >
                         <p className='text-center notice' style={{margin : '10px'}} >{!end || noPost === 'Not yet posted' ? '' : <span>Looks like <b style={{color : 'black'}}>End</b> of profile page create more cards to showcase them</span>}</p>

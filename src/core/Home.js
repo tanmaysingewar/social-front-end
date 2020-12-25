@@ -47,7 +47,6 @@ function Home() {
         if(end) return;
         setIntLoding(true)
             
-            setTimeout(() => {
                 getAllPost(token,skip,limit)
                 .then((data) =>{
                     console.log(data)
@@ -69,7 +68,6 @@ function Home() {
                     }
                     setIntLoding(false)  
                 })  
-            }, 2000);
             
             let nextCount = skip + limit
             setSkip(nextCount) 

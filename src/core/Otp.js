@@ -5,10 +5,15 @@ import { authincate, checkOtp, isAuthincated, sendOtp } from '../auth/helper'
 function Otp(props) {
     const {token} = isAuthincated()
 
+    const [sentMessage, setsentMessage] = useState('')
+
     const [resend, setresend] = useState(false)
+
     useEffect(() => {
+      setsentMessage('sending ....')
         sendOtp(token)
         .then(data =>{
+          setsentMessage('send')
         }) // eslint-disable-next-line 
     }, [resend])
     
@@ -32,6 +37,7 @@ function Otp(props) {
         .then(data =>{
             if(!data.match){
                 setresend(!resend)
+                setintLoading(false)
                 return setWarningMsg(true)
             }
             authincate(data,()=>{
@@ -59,7 +65,7 @@ function Otp(props) {
 
     const performRedirect = ()=>{
         if (success) {
-          return <Redirect to='/profile/me' />
+          return <Redirect to='/introduction' />
         }
     }
 
@@ -74,6 +80,7 @@ function Otp(props) {
                   <h5 className='text-center'>OTP </h5>
                     <p className='success text-center'>Entre OTP here to procide</p>
                     <p className=' text-center'>{props.match.params.email}</p>
+                    <p className='text-center '>{sentMessage === 'send' ? <span className='success'>{sentMessage}</span> : <span className='warning'>{sentMessage}</span>}</p>
                   <div class="row">
                       <div class="row singin-form col s12">
                         <div class="input-field col s12">
@@ -84,11 +91,13 @@ function Otp(props) {
                       <div class="row singin-form">
                         <div class="input-field col s12 text-center">
                         <button class="btn waves-effect waves-light" type="submit" name="action"  onClick={() => onSubmit()} >Submit </button><br/><br/>
-                        <p>Resend the otp</p>
+                        
                         </div>
                       </div>
                   </div>
+                  <p className='text-center' onClick={() => setresend(!resend)}>Click here to resend the otp</p>
                 </div>
+                
               </div>
             </div>
           </div>
